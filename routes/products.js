@@ -9,7 +9,7 @@ const productDataLayer=require('../dal/product')
 
 router.get('/shop',async (req,res)=>{
     let products=await Product.collection().fetch({
-        withRelated:['category']
+        withRelated:['category','skintype']
     })
     res.render('shop/index',{
         'products':products.toJSON()
