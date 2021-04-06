@@ -15,13 +15,13 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-    return db.addColumn('products', 'skintype_id', {
+    return db.addColumn('products', 'brand_id', {
         type: 'int',
         unsigned: true,
         notNull: true,
         foreignKey: {
-            name: 'product_skintype_fk',
-            table: 'skintype',
+            name: 'product_brand_fk',
+            table: 'brands',
             rules: {
                 onDelete: 'cascade',
                 onUpdate: 'restrict'
@@ -32,8 +32,8 @@ exports.up = function (db) {
 };
 
 exports.down = async function (db) {
-    await db.removeForeignKey('product_skintype_fk');
-    await db.dropColumn('skintype_id');
+    await db.removeForeignKey('product_brand_fk');
+    await db.dropColumn('brand_id');
 };
 
 exports._meta = {

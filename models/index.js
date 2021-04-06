@@ -7,6 +7,13 @@ const Product=bookshelf.model('Product',{
 
     skintype(){
         return this.belongsTo('Skintype')
+    },
+
+    brand(){
+        return this.belongsTo('Brand')
+    },
+    tag(){
+        return this.belongsToMany('Tag')
     }
 });
 
@@ -23,4 +30,18 @@ const Skintype=bookshelf.model('Skintype',{
         return this.hasMany('Product')
     }
 })
-module.exports={Product,Category,Skintype}
+
+const Brand=bookshelf.model('Brand',{
+    tableName:'brands',
+    products(){
+        return this.hasMany('Product')
+    }
+})
+
+const Tag=bookshelf.model('Tag',{
+    tableName:'tags',
+    products(){
+        return this.belongsToMany('Product')
+    }
+})
+module.exports={Product,Category,Skintype,Brand,Tag}

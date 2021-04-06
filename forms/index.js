@@ -1,5 +1,5 @@
 const forms = require('forms')
-const fields=forms.fields
+const fields = forms.fields
 const validators = forms.validators
 const widget = widgets = require('forms').widgets;
 
@@ -23,7 +23,7 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createProductForm = (categories) => {
+const createProductForm = (categories, skintype, brands, tags) => {
     return forms.create({
         'name': fields.string({
             required: true,
@@ -97,17 +97,37 @@ const createProductForm = (categories) => {
             widget: widgets.select(),
             choices: categories
         }),
-        // 'tags': fields.string({
-        //     label: 'Tags',
-        //     required: true,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     },
-        //     widget: forms.widgets.multipleSelect(),
-        //     //choices is set to all tags from the 'tags' table
-        //     choices: tags
-        // }),
+        'skintype_id': fields.string({
+            label: 'Skin Type',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: skintype
+        }),
+
+        'brand_id': fields.string({
+            label: 'Brand',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: brands
+        }),
+        'tags': fields.string({
+            label: 'Tags',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: forms.widgets.multipleSelect(),
+            choices: tags
+        }),
         // 'image_url':fields.string({
         //     required:true,
         //     errorAfterField:true,

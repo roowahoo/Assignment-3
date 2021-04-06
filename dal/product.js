@@ -1,14 +1,38 @@
-const {Category}=require('../models')
-const getAllCategories=async()=>{
+const { Category, Skintype, Brand, Tag } = require('../models')
+const getAllCategories = async () => {
     const allCategories = await Category.fetchAll().map((category) => {
         return [category.get('id'), category.get('name')]
     });
     return allCategories
 }
 
+const getAllSkintypes = async () => {
+    const allSkinTypes = await Skintype.fetchAll().map((skintype) => {
+        return [skintype.get('id'), skintype.get('skintype')]
+    })
+    return allSkinTypes
+}
+
+const getAllBrands = async () => {
+    const allBrands = await Brand.fetchAll().map((brand) => {
+        return [brand.get('id'), brand.get('brand')]
+    })
+    return allBrands
+}
+
+const getAllTags = async () => {
+    const allTags = await Tag.fetchAll().map((tag) => {
+        return [tag.get('id'), tag.get('tag')]
+    })
+    return allTags
+}
 
 
 
-module.exports={
-    getAllCategories
+
+module.exports = {
+    getAllCategories,
+    getAllSkintypes,
+    getAllBrands,
+    getAllTags
 }
