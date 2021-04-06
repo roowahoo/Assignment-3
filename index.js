@@ -28,7 +28,7 @@ const productsRoutes=require('./routes/products')
 
 async function main() {
     app.use('/', landingRoutes);
-    app.use('/shop',productsRoutes)
+    app.use('/products',productsRoutes)
 }
 
 main();
