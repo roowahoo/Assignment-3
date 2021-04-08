@@ -139,4 +139,40 @@ const createProductForm = (categories, skintype, brands, tags) => {
     })
 };
 
-module.exports = { createProductForm, bootstrapField };
+const createRegistrationForm = () => {
+    return forms.create({
+        'username': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'email': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'confirm_password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.matchField('password')]
+        })
+    })
+}
+
+
+
+module.exports = { createProductForm, bootstrapField, createRegistrationForm};
