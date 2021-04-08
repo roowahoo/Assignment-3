@@ -126,4 +126,17 @@ router.post('/:product_id/update',async (req,res)=>{
     })
 
 })
+
+router.get('/:product_id/delete',async (req,res)=>{
+    const productToDelete=await productDataLayer.getProductById(req.params.product_id)
+    res.render('products/delete',{
+        'product':productToDelete
+    })
+})
+
+router.post('/:product_id/delete', async(req,res)=>{
+    const productToDelete=await productDataLayer.getProductById(req.params.product_id)
+    await productToDelete.destroy();
+    res.redirect('/products/shop')
+})
 module.exports=router
