@@ -100,4 +100,30 @@ router.get('/:product_id/update',async (req,res)=>{
         'product':productToEdit.toJSON()
     })
 })
+
+router.post('/:product_id/update',async (req,res)=>{
+    const productToEdit=await productDataLayer.getProductById(req.params.product_id)
+    const productJSON=productToEdit.toJSON()
+    const existingTagIds=productJSON.tags.map(t=>t.id)
+
+    const productForm=createProductForm()
+    productForm.handle(req,{
+        'success':async(form)=>{
+            let {tags,...productData}=form.data
+            productToEdit.set(productData)
+            productToEdit.save()
+            let newTagsId=tags.split(',')
+            productToEdit.tags().detach(existingTagIds)
+            productToEdit.tags().attach(newTagsId)
+            res.redirect('/products/shop')
+        },
+        'error':async(form)=>{
+            res.render('products/update',{
+                'form':productForm.toHTML(bootstrapField)
+            })
+
+        }
+    })
+
+})
 module.exports=router
