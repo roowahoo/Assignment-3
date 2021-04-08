@@ -14,9 +14,9 @@
 </head>
 
 <body>
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/products">poop</a>
+        <a class="navbar-brand" href="/">ForSkin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,10 +24,10 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="">Create</a>
+                    <a class="nav-link" href="/products/shop">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Login</a>
+                    <a class="nav-link" href="/products/create">Create</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="">Cart</a>
@@ -36,8 +36,24 @@
         </div>
     </nav>
     <section class='container'>
-    {{#block 'content'}}
-    {{/block}}
+        {{#if success_messages }}
+        {{#each success_messages}}
+        <div class="alert alert-success">
+            {{this}}
+        </div>
+        {{/each}}
+        {{/if}}
+
+        {{#if error_messages}}
+        {{#each error_messages}}
+        <div class="alert alert-danger">
+            {{this}}
+        </div>
+        {{/each}}
+        {{/if}}
+        
+        {{#block 'content'}}
+        {{/block}}
     </section>
 
     <!-- Optional JavaScript -->

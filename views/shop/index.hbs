@@ -14,7 +14,9 @@
     <span class="badge badge-pill badge-primary">{{this.tag}}</span>
     {{/each}}
 
-    {{!-- <a href="#" className="btn btn-primary">Go somewhere</a> --}}
+
+    <a href="/products/{{this.id}}/update" className="btn btn-primary">Update</a>
+    <a href="/products/{{this.id}}/delete" className="btn btn-danger">Delete</a>
   </div>
 </div>
 {{/each}}

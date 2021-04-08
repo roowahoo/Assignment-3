@@ -58,13 +58,16 @@ router.post('/create',  async(req,res)=>{
             if (tags) {
                 await newProduct.tags().attach(tags.split(","))
             }
+            req.flash('success_messages',`New Product ${newProduct.get('name')} has been created`)
             res.redirect('/products/shop')
             
         },
         'error': async (form) => {
+            req.flash('error_messages','Error creating product')
             res.render('products/create', {
                 'form': form.toHTML(bootstrapField)
             })
+            
         }
     })
 })
@@ -115,9 +118,11 @@ router.post('/:product_id/update',async (req,res)=>{
             let newTagsId=tags.split(',')
             productToEdit.tags().detach(existingTagIds)
             productToEdit.tags().attach(newTagsId)
+            req.flash('success_messages',`Product ${productToEdit.get('name')} has been updated`)
             res.redirect('/products/shop')
         },
         'error':async(form)=>{
+            req.flash('error_messages','Error updating product')
             res.render('products/update',{
                 'form':productForm.toHTML(bootstrapField)
             })

@@ -2,6 +2,8 @@ const express = require('express');
 const hbs = require('hbs');
 const wax = require('wax-on');
 require('dotenv').config();
+const session = require('express-session');
+const flash = require('connect-flash');
 
 // create an instance of express app
 let app = express();
@@ -22,6 +24,22 @@ app.use(
     extended: false
   })
 );
+
+//sessions
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
+//flash messages
+app.use(flash())
+app.use(function (req, res, next) {
+    res.locals.success_messages = req.flash("success_messages");
+    res.locals.error_messages = req.flash("error_messages");
+    next();
+});
+
 
 const landingRoutes=require ('./routes/landing')
 const productsRoutes=require('./routes/products')
