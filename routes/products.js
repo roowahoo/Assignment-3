@@ -9,7 +9,7 @@ const productDataLayer=require('../dal/product')
 
 router.get('/shop',async (req,res)=>{
     let products=await Product.collection().fetch({
-        withRelated:['category','skintype','brand','tag']
+        withRelated:['category','skintype','brand','tags']
     })
     res.render('shop/index',{
         'products':products.toJSON()
@@ -66,6 +66,38 @@ router.post('/create',  async(req,res)=>{
                 'form': form.toHTML(bootstrapField)
             })
         }
+    })
+})
+
+router.get('/:product_id/update',async (req,res)=>{
+    const allCategories = await productDataLayer.getAllCategories()
+    const allSkintypes = await productDataLayer.getAllSkintypes()
+    const allBrands = await productDataLayer.getAllBrands()
+    const allTags = await productDataLayer.getAllTags()
+
+    const productToEdit=await productDataLayer.getProductById(req.params.product_id)
+    const productJSON = productToEdit.toJSON()
+    console.log(productJSON)
+    const selectedTagIds = productJSON.tags.map(t => t.id)
+
+    const productForm = createProductForm(allCategories,allSkintypes,allBrands,allTags);
+
+    productForm.fields.name.value=productToEdit.get('name');
+    productForm.fields.description.value=productToEdit.get('description');
+    productForm.fields.directions.value=productToEdit.get('directions');
+    productForm.fields.ingredients.value=productToEdit.get('ingredients');
+    productForm.fields.net_weight.value=productToEdit.get('net_weight');
+    productForm.fields.price.value=productToEdit.get('price');
+    productForm.fields.stock.value=productToEdit.get('stock');
+    productForm.fields.date_of_manufacture.value=productToEdit.get('date_of_manufacture');
+    productForm.fields.category_id.value=productToEdit.get('category_id');
+    productForm.fields.skintype_id.value=productToEdit.get('skintype_id');
+    productForm.fields.brand_id.value=productToEdit.get('brand_id');
+    productForm.fields.tags.value=selectedTagIds
+
+    res.render('products/update',{
+        'form':productForm.toHTML(bootstrapField),
+        'product':productToEdit.toJSON()
     })
 })
 module.exports=router

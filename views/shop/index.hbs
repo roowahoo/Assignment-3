@@ -7,9 +7,12 @@
     <h4 class="card-text">{{this.brand.brand}}</h4>
     <h5 class="card-title">{{this.name}}</h5>
     <p class="card-text">{{this.description}}</p>
-    <p class="card-text">{{this.price}}</p>
+    <p class="card-text">${{this.price}}</p>
     <p class="card-text">{{this.category.name}}</p>
     <p class="card-text">{{this.skintype.skintype}}</p>
+    {{#each this.tags}}
+    <span class="badge badge-pill badge-primary">{{this.tag}}</span>
+    {{/each}}
 
     {{!-- <a href="#" className="btn btn-primary">Go somewhere</a> --}}
   </div>

@@ -12,7 +12,7 @@ const Product=bookshelf.model('Product',{
     brand(){
         return this.belongsTo('Brand')
     },
-    tag(){
+    tags(){
         return this.belongsToMany('Tag')
     }
 });
