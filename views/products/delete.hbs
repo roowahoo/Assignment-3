@@ -4,6 +4,7 @@
 
 <form method="POST">
     <div class="alert alert-danger">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         <p>Are you sure you want to delete {{product.name}}?</p>
         <input type="submit" class="btn btn-danger" value="Yes"/>
         <a href="/products/shop" class="btn btn-success">No</a>

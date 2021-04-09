@@ -4,6 +4,7 @@ const wax = require('wax-on');
 require('dotenv').config();
 const session = require('express-session');
 const flash = require('connect-flash');
+const csrf = require('csurf')
 
 // create an instance of express app
 let app = express();
@@ -40,8 +41,17 @@ app.use(function (req, res, next) {
     next();
 });
 
+//session data
 app.use(function(req,res,next){
     res.locals.user = req.session.user;
+    next();
+})
+
+//csurf
+app.use(csrf())
+
+app.use(function(req,res,next){
+    res.locals.csrfToken = req.csrfToken();
     next();
 })
 
