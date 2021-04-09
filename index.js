@@ -40,6 +40,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use(function(req,res,next){
+    res.locals.user = req.session.user;
+    next();
+})
+
 
 const landingRoutes=require ('./routes/landing')
 const productsRoutes=require('./routes/products')

@@ -3,6 +3,7 @@ const router=express.Router()
 
 const {Product}=require('../models')
 const { bootstrapField, createProductForm } = require('../forms')
+const {checkIfAuthenticated}=require('../middlewares')
 
 //import DAL
 const productDataLayer=require('../dal/product')
@@ -17,7 +18,7 @@ router.get('/shop',async (req,res)=>{
     console.log(products.toJSON())
 })
 
-router.get('/create', async (req, res) => {
+router.get('/create',checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -28,7 +29,7 @@ router.get('/create', async (req, res) => {
     })
 })
 
-router.post('/create',  async(req,res)=>{
+router.post('/create', checkIfAuthenticated,  async(req,res)=>{
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
