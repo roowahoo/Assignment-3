@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { User } = require('../models')
-const { createRegistrationForm, bootstrapField } = require('../forms')
+const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms')
 
 router.get('/register', (req, res) => {
     const registrationForm = createRegistrationForm();
@@ -32,8 +32,45 @@ router.post('/register',(req,res)=>{
 })
 
 router.get('/login', (req, res) => {
-    
-    res.render('users/login')
+    const loginForm=createLoginForm()
+    res.render('users/login',{
+        'form':loginForm.toHTML(bootstrapField)
+    })
+})
+
+router.post('/login',(req,res)=>{
+    const loginForm=createLoginForm()
+    loginForm.handle(req,{
+        'success':async(form)=>{
+            let user=await User.where({
+                'email':form.data.email
+            }).fetch({
+                require:false
+            })
+            if (user){
+                if(user.get('password')===form.data.password){
+                    req.session.user={
+                        id:user.get('id'),
+                        username:user.get('username'),
+                        email:user.get('email'),
+                    }
+                    req.flash('success_messages','Login successful')
+                    res.redirect('/')
+                }else{
+                    req.flash('error_messages','Password is invalid')
+                    res.redirect('/users/login')
+                }
+            }else{
+                req.flash('error_messages','User not found')
+                res.redirect('/users/login')
+            }
+        },
+        'error':(form)=>{
+            res.render('users/login',{
+                'form':loginForm.toHTML(bootstrapField)
+            })
+        }
+    })
 })
 
 
