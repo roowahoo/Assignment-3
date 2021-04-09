@@ -2,6 +2,13 @@ const express = require('express')
 const router = express.Router()
 const { User } = require('../models')
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms')
+const crypto = require('crypto')
+
+const getHashedPassword=(password)=>{
+    const sha256=crypto.createHash('sha256')
+    const hash=sha256.update(password).digest('base64')
+    return hash
+}
 
 router.get('/register', (req, res) => {
     const registrationForm = createRegistrationForm();
@@ -14,12 +21,15 @@ router.post('/register',(req,res)=>{
     const registrationForm=createRegistrationForm()
     registrationForm.handle(req,{
         'success':async(form)=>{
-            const user=new User({
-                'username':form.data.username,
-                'email':form.data.email,
-                'password':form.data.password
-            })
-            await user.save()
+            let {confirm_password,...userData}=form.data
+            userData.password=getHashedPassword(userData.password)
+            const newUser=new User(userData)
+            // const user=new User({
+            //     'username':form.data.username,
+            //     'email':form.data.email,
+            //     'password':getHashedPassword(form.data.password)
+            // })
+            await newUser.save()
             req.flash('success_messages','Thank you for signing up')
             res.redirect('/users/login')
         },
@@ -48,7 +58,7 @@ router.post('/login',(req,res)=>{
                 require:false
             })
             if (user){
-                if(user.get('password')===form.data.password){
+                if(user.get('password')===getHashedPassword(form.data.password)){
                     req.session.user={
                         id:user.get('id'),
                         username:user.get('username'),
@@ -71,6 +81,12 @@ router.post('/login',(req,res)=>{
             })
         }
     })
+})
+
+router.get('/logout',(req,res)=>{
+    req.session.user=null
+    req.flash('success_messages','Goodbye')
+    res.redirect('/users/login')
 })
 
 
