@@ -98,6 +98,7 @@ router.get('/:product_id/update',async (req,res)=>{
     productForm.fields.skintype_id.value=productToEdit.get('skintype_id');
     productForm.fields.brand_id.value=productToEdit.get('brand_id');
     productForm.fields.tags.value=selectedTagIds
+    
 
     res.render('products/update',{
         'form':productForm.toHTML(bootstrapField),

@@ -2,7 +2,7 @@
 {{#block 'content'}}
 {{#each products}}
 <div class="card" style="width: 18rem;">
-  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+  <img class="card-img-top" src="{{this.image_url}}" alt="product_image">
   <div class="card-body">
     <h4 class="card-text">{{this.brand.brand}}</h4>
     <h5 class="card-title">{{this.name}}</h5>
@@ -15,8 +15,8 @@
     {{/each}}
 
 
-    <a href="/products/{{this.id}}/update" className="btn btn-primary">Update</a>
-    <a href="/products/{{this.id}}/delete" className="btn btn-danger">Delete</a>
+    <a href="/products/{{this.id}}/update" class="btn btn-primary">Update</a>
+    <a href="/products/{{this.id}}/delete" class="btn btn-danger">Delete</a>
   </div>
 </div>
 {{/each}}

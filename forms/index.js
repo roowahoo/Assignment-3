@@ -128,12 +128,12 @@ const createProductForm = (categories, skintype, brands, tags) => {
             widget: forms.widgets.multipleSelect(),
             choices: tags
         }),
-        // 'image_url':fields.string({
-        //     required:true,
-        //     errorAfterField:true,
-        //     widget:widgets.hidden()
+        'image_url': fields.string({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.hidden()
 
-        // })
+        })
 
 
     })
@@ -173,13 +173,13 @@ const createRegistrationForm = () => {
     })
 }
 
-const createLoginForm=()=>{
+const createLoginForm = () => {
     return forms.create({
-        'email':fields.string({
-            required:true,
-            errorAfterField:true,
-            cssClasses:{
-                label:['form-label']
+        'email': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
             }
         }),
         'password': fields.password({
@@ -194,4 +194,4 @@ const createLoginForm=()=>{
 
 
 
-module.exports = { createProductForm, bootstrapField, createRegistrationForm,createLoginForm};
+module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm };

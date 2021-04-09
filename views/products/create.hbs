@@ -5,8 +5,20 @@
 <form method="POST">
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     {{{form}}}
-    <input type="submit" value="Add Product" class="btn btn-primary"/>
+    <input type="hidden" role="uploadcare-uploader" name="uploaded_image" id='uploaded_image' />
+    <input type="submit" value="Add Product" class="btn btn-primary" id='add_product' />
     {{/block}}
 </form>
 
 {{/extends}}
+
+{{#block 'js'}}
+<script>
+    UPLOADCARE_PUBLIC_KEY = '1b13392e19004ca4680c';
+     document.querySelector('#add_product').addEventListener('click', () => {
+        document.querySelector('#id_image_url').value = document.querySelector('#uploaded_image').value
+    })
+</script>
+
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
+{{/block}}
