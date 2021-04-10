@@ -1,45 +1,125 @@
-const express =require('express')
-const router=express.Router()
+const express = require('express')
+const router = express.Router()
 
-const {Product}=require('../models')
-const { bootstrapField, createProductForm } = require('../forms')
-const {checkIfAuthenticated}=require('../middlewares')
+const { Product } = require('../models')
+const { bootstrapField, createProductForm, createSearchForm } = require('../forms')
+const { checkIfAuthenticated } = require('../middlewares')
 
 //import DAL
-const productDataLayer=require('../dal/product')
+const productDataLayer = require('../dal/product')
 
-router.get('/shop',async (req,res)=>{
-    let products=await Product.collection().fetch({
-        withRelated:['category','skintype','brand','tags']
+router.get('/shop', async (req, res) => {
+
+    const allCategories = await productDataLayer.getAllCategories()
+    allCategories.unshift([0, '----'])
+    const allSkintypes = await productDataLayer.getAllSkintypes()
+    allSkintypes.unshift([0, '----'])
+    const allBrands = await productDataLayer.getAllBrands()
+    allBrands.unshift([0, '----'])
+    const allTags = await productDataLayer.getAllTags()
+    const searchForm = createSearchForm(allCategories, allSkintypes, allBrands, allTags);
+    let products = Product.collection()
+
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let results = await products.fetch({
+                withRelated: ['category', 'skintype', 'brand', 'tags']
+            })
+            res.render('shop/index', {
+                'products': results.toJSON(),
+                'form': form.toHTML(bootstrapField)
+
+            })
+
+        },
+        'success': async (form) => {
+            if (form.data.name){
+                products=products.where('name','like','%'+form.data.name+'%')
+            }
+            if (form.data.min_price){
+                
+                products=products.where('price','>=',form.data.min_price)
+            }
+            if (form.data.max_price){
+                
+                products=products.where('price','<=',form.data.max_price)
+            }
+            if (form.data.stock){
+                
+                products=products.where('stock','>=',form.data.stock)
+            }
+            if (form.data.date_of_manufacture){
+                
+                products=products.where('date_of_manufacture','=',form.data.date_of_manufacture)
+            }
+            if (form.data.category_id !== 0){
+                products=products.where('category_id','=',form.data.category_id)
+            }
+            if (form.data.skintype_id !== 0){
+                products=products.where('skintype_id','=',form.data.skintype_id)
+            }
+            if (form.data.brand_id !== 0){
+                products=products.where('brand_id','=',form.data.brand_id)
+            }
+            if (form.data.tags){
+                products=products.query('join','products_tags','id','product_id').where('tag_id','in',form.data.tags.split(','))
+            }
+
+            let results=await products.fetch({
+                withRelated:['category', 'skintype', 'brand', 'tags']
+            })
+            res.render('shop/index', {
+                'products': results.toJSON(),
+                'form': form.toHTML(bootstrapField)
+
+            })
+
+        },
+        'error': async (form) => {
+            let results = await products.fetch({
+                withRelated: ['category', 'skintype', 'brand', 'tags']
+            })
+            res.render('shop/index', {
+                'products': results.toJSON(),
+                'form': form.toHTML(bootstrapField)
+
+            })
+
+        }
     })
-    res.render('shop/index',{
-        'products':products.toJSON()
-    })
-    console.log(products.toJSON())
+
+    // let products=await Product.collection().fetch({
+    //     withRelated:['category','skintype','brand','tags']
+    // })
+    // res.render('shop/index',{
+    //     'products':products.toJSON()
+    // })
+    // console.log(products.toJSON())
 })
 
-router.get('/create',checkIfAuthenticated, async (req, res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
     const allTags = await productDataLayer.getAllTags()
-    const productForm = createProductForm(allCategories,allSkintypes,allBrands,allTags);
-    res.render('products/create',{
+    const productForm = createProductForm(allCategories, allSkintypes, allBrands, allTags);
+    res.render('products/create', {
         'form': productForm.toHTML(bootstrapField)
     })
 })
 
-router.post('/create', checkIfAuthenticated,  async(req,res)=>{
+router.post('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
     const allTags = await productDataLayer.getAllTags()
 
-    const productForm = createProductForm(allCategories,allSkintypes,allBrands,allTags);
+    const productForm = createProductForm(allCategories, allSkintypes, allBrands, allTags);
 
     productForm.handle(req, {
         'success': async (form) => {
-            let {tags,...productData}=form.data
+            let { tags, ...productData } = form.data
             const newProduct = new Product();
             newProduct.set(productData)
             // newProduct.set('name',form.data.name)
@@ -59,74 +139,74 @@ router.post('/create', checkIfAuthenticated,  async(req,res)=>{
             if (tags) {
                 await newProduct.tags().attach(tags.split(","))
             }
-            req.flash('success_messages',`New Product ${newProduct.get('name')} has been created`)
+            req.flash('success_messages', `New Product ${newProduct.get('name')} has been created`)
             res.redirect('/products/shop')
-            
+
         },
         'error': async (form) => {
-            req.flash('error_messages','Error creating product')
+            req.flash('error_messages', 'Error creating product')
             res.render('products/create', {
                 'form': form.toHTML(bootstrapField)
             })
-            
+
         }
     })
 })
 
-router.get('/:product_id/update',async (req,res)=>{
+router.get('/:product_id/update', async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
     const allTags = await productDataLayer.getAllTags()
 
-    const productToEdit=await productDataLayer.getProductById(req.params.product_id)
+    const productToEdit = await productDataLayer.getProductById(req.params.product_id)
     const productJSON = productToEdit.toJSON()
     console.log(productJSON)
     const selectedTagIds = productJSON.tags.map(t => t.id)
 
-    const productForm = createProductForm(allCategories,allSkintypes,allBrands,allTags);
+    const productForm = createProductForm(allCategories, allSkintypes, allBrands, allTags);
 
-    productForm.fields.name.value=productToEdit.get('name');
-    productForm.fields.description.value=productToEdit.get('description');
-    productForm.fields.directions.value=productToEdit.get('directions');
-    productForm.fields.ingredients.value=productToEdit.get('ingredients');
-    productForm.fields.net_weight.value=productToEdit.get('net_weight');
-    productForm.fields.price.value=productToEdit.get('price');
-    productForm.fields.stock.value=productToEdit.get('stock');
-    productForm.fields.date_of_manufacture.value=productToEdit.get('date_of_manufacture');
-    productForm.fields.category_id.value=productToEdit.get('category_id');
-    productForm.fields.skintype_id.value=productToEdit.get('skintype_id');
-    productForm.fields.brand_id.value=productToEdit.get('brand_id');
-    productForm.fields.tags.value=selectedTagIds
-    
+    productForm.fields.name.value = productToEdit.get('name');
+    productForm.fields.description.value = productToEdit.get('description');
+    productForm.fields.directions.value = productToEdit.get('directions');
+    productForm.fields.ingredients.value = productToEdit.get('ingredients');
+    productForm.fields.net_weight.value = productToEdit.get('net_weight');
+    productForm.fields.price.value = productToEdit.get('price');
+    productForm.fields.stock.value = productToEdit.get('stock');
+    productForm.fields.date_of_manufacture.value = productToEdit.get('date_of_manufacture');
+    productForm.fields.category_id.value = productToEdit.get('category_id');
+    productForm.fields.skintype_id.value = productToEdit.get('skintype_id');
+    productForm.fields.brand_id.value = productToEdit.get('brand_id');
+    productForm.fields.tags.value = selectedTagIds
 
-    res.render('products/update',{
-        'form':productForm.toHTML(bootstrapField),
-        'product':productToEdit.toJSON()
+
+    res.render('products/update', {
+        'form': productForm.toHTML(bootstrapField),
+        'product': productToEdit.toJSON()
     })
 })
 
-router.post('/:product_id/update',async (req,res)=>{
-    const productToEdit=await productDataLayer.getProductById(req.params.product_id)
-    const productJSON=productToEdit.toJSON()
-    const existingTagIds=productJSON.tags.map(t=>t.id)
+router.post('/:product_id/update', async (req, res) => {
+    const productToEdit = await productDataLayer.getProductById(req.params.product_id)
+    const productJSON = productToEdit.toJSON()
+    const existingTagIds = productJSON.tags.map(t => t.id)
 
-    const productForm=createProductForm()
-    productForm.handle(req,{
-        'success':async(form)=>{
-            let {tags,...productData}=form.data
+    const productForm = createProductForm()
+    productForm.handle(req, {
+        'success': async (form) => {
+            let { tags, ...productData } = form.data
             productToEdit.set(productData)
             productToEdit.save()
-            let newTagsId=tags.split(',')
+            let newTagsId = tags.split(',')
             productToEdit.tags().detach(existingTagIds)
             productToEdit.tags().attach(newTagsId)
-            req.flash('success_messages',`Product ${productToEdit.get('name')} has been updated`)
+            req.flash('success_messages', `Product ${productToEdit.get('name')} has been updated`)
             res.redirect('/products/shop')
         },
-        'error':async(form)=>{
-            req.flash('error_messages','Error updating product')
-            res.render('products/update',{
-                'form':productForm.toHTML(bootstrapField)
+        'error': async (form) => {
+            req.flash('error_messages', 'Error updating product')
+            res.render('products/update', {
+                'form': productForm.toHTML(bootstrapField)
             })
 
         }
@@ -134,16 +214,16 @@ router.post('/:product_id/update',async (req,res)=>{
 
 })
 
-router.get('/:product_id/delete',async (req,res)=>{
-    const productToDelete=await productDataLayer.getProductById(req.params.product_id)
-    res.render('products/delete',{
-        'product':productToDelete
+router.get('/:product_id/delete', async (req, res) => {
+    const productToDelete = await productDataLayer.getProductById(req.params.product_id)
+    res.render('products/delete', {
+        'product': productToDelete
     })
 })
 
-router.post('/:product_id/delete', async(req,res)=>{
-    const productToDelete=await productDataLayer.getProductById(req.params.product_id)
+router.post('/:product_id/delete', async (req, res) => {
+    const productToDelete = await productDataLayer.getProductById(req.params.product_id)
     await productToDelete.destroy();
     res.redirect('/products/shop')
 })
-module.exports=router
+module.exports = router

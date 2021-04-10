@@ -192,6 +192,95 @@ const createLoginForm = () => {
     })
 }
 
+const createSearchForm=(categories, skintype, brands, tags)=>{
+    return forms.create({
+        'name': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'min_price': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            'validators': [validators.integer()]
+        }),
+        'max_price': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            'validators': [validators.integer()]
+        }),
+        
+        'stock': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            'validators': [validators.integer()]
+        }),
+        'date_of_manufacture': fields.date({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widget.date()
+        }),
+
+        'category_id': fields.string({
+            label: 'Category',
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: categories
+        }),
+        'skintype_id': fields.string({
+            label: 'Skin Type',
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: skintype
+        }),
+
+        'brand_id': fields.string({
+            label: 'Brand',
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: brands
+        }),
+        'tags': fields.string({
+            label: 'Tags',
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: forms.widgets.multipleSelect(),
+            choices: tags
+        })
 
 
-module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm };
+    })
+}
+
+
+
+module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm };
