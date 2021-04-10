@@ -48,4 +48,14 @@ const Tag=bookshelf.model('Tag',{
 const User=bookshelf.model('User',{
     tableName:'users'
 })
-module.exports={Product,Category,Skintype,Brand,Tag,User}
+
+const Bag=bookshelf.model('Bag',{
+    tableName:'shopping_bag',
+    products(){
+        return this.belongsTo('Product')
+    },
+    users(){
+        return this.belongsTo('User')
+    }
+})
+module.exports={Product,Category,Skintype,Brand,Tag,User,Bag}
