@@ -26,6 +26,15 @@ class BagServices {
             return item
         }
     }
+
+    async removeFromBag(productId){
+        const item=await shoppingBagDataLayer.getBagItemByUserAndProduct(this.user_id,productId)
+        if(item){
+            await item.destroy()
+            return true
+        }
+        return false
+    }
 }
 
 module.exports = BagServices;

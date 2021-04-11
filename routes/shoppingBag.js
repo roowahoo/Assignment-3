@@ -19,4 +19,11 @@ router.get('/:product_id/add',async(req,res)=>{
     res.redirect('back')
 })
 
+router.get('/:product_id/remove',async (req,res)=>{
+    let bag=new BagServices(req.session.user.id)
+    await bag.removeFromBag(req.params.product_id)
+    req.flash('success_messages','Removed from bag')
+    res.redirect('/bag')
+})
+
 module.exports=router

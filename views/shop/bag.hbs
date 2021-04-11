@@ -9,8 +9,9 @@
         <h4>{{this.products.name}}</h3>
             <h5>Category: {{this.products.category.name}}</h5>
             <h5>Cost: {{this.products.cost}} </h5>        
-            <h5>Quantity{{this.quantity}}</h5>   
+            <h5>Quantity: {{this.quantity}}</h5>   
     </li>
+    <a href='/bag/{{this.products.id}}/remove' class='btn btn-danger'>Remove</a>
     {{/each}}
 </ul>
 
