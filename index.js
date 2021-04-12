@@ -62,12 +62,14 @@ const landingRoutes = require('./routes/landing')
 const productsRoutes = require('./routes/products')
 const usersRoutes = require('./routes/users')
 const shoppingBagRoutes = require('./routes/shoppingBag')
+const checkoutRoutes = require('./routes/checkout')
 
 async function main() {
     app.use('/', landingRoutes);
     app.use('/products', productsRoutes)
     app.use('/users', usersRoutes)
     app.use('/bag', shoppingBagRoutes)
+    app.use('/checkout',checkoutRoutes)
 
 }
 
