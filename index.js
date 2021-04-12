@@ -50,10 +50,19 @@ app.use(function (req, res, next) {
 })
 
 //csurf
-app.use(csrf())
+// app.use(csrf())
+const csurfInstance = csrf();
+app.use(function(req,res,next){
+    if(req.url==='/checkout/process_payment'){
+        return next()
+    }
+    csurfInstance(req,res,next)
+})
 
 app.use(function (req, res, next) {
-    res.locals.csrfToken = req.csrfToken();
+    if (req.csrfToken){
+        res.locals.csrfToken = req.csrfToken();
+    }
     next();
 })
 
@@ -70,7 +79,6 @@ async function main() {
     app.use('/users', usersRoutes)
     app.use('/bag', shoppingBagRoutes)
     app.use('/checkout',checkoutRoutes)
-
 }
 
 main();

@@ -58,4 +58,19 @@ const Bag=bookshelf.model('Bag',{
         return this.belongsTo('User')
     }
 })
-module.exports={Product,Category,Skintype,Brand,Tag,User,Bag}
+
+const Orders=bookshelf.model('Order',{
+    tableName:'orders',
+    users(){
+        return this.belongsTo('User')
+    }
+
+})
+
+const OrderItems=bookshelf.model('Order_item',{
+    tableName:'order_items',
+    products(){
+        return this.belongsTo('Product')
+    }
+})
+module.exports={Product,Category,Skintype,Brand,Tag,User,Bag,Orders,OrderItems}
