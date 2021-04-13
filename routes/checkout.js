@@ -4,8 +4,8 @@ const BagServices = require('../services/bag_services');
 const Stripe=require('stripe')(process.env.STRIPE_SECRET_KEY)
 const bodyParser=require('body-parser')
 
-router.get('/',async (req,res)=>{
-    const bag=new BagServices(req.session.user.id)
+router.get('/:user_id',async (req,res)=>{
+    const bag=new BagServices(req.params.user_id)
     let bagItems=await bag.getAllItemsInBag()
     let orderItems=[]
     let meta=[]

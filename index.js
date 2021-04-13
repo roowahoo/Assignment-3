@@ -70,11 +70,13 @@ app.use(function (req, res, next) {
 const landingRoutes = require('./routes/landing')
 const productsRoutes = require('./routes/products')
 const vendorsRoutes = require('./routes/vendors')
+
 const shoppingBagRoutes = require('./routes/shoppingBag')
 const checkoutRoutes = require('./routes/checkout')
 const api={
     products:require('./routes/api/products'),
-    confirmOrder:require('./routes/api/confirmOrder')
+    confirmOrder:require('./routes/api/confirmOrder'),
+    shoppers:require('./routes/api/shoppers')
 }
 
 async function main() {
@@ -85,6 +87,7 @@ async function main() {
     app.use('/checkout',checkoutRoutes)
     app.use('/api/products',express.json(),api.products)
     app.use('/api/confirmOrder',express.json(),api.confirmOrder)
+    app.use('/api/shoppers',express.json(),api.shoppers)
 }
 
 main();
