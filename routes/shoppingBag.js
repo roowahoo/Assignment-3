@@ -4,20 +4,17 @@ const router = express.Router();
 const BagServices = require('../services/bag_services');
 const { checkIfAuthenticated } = require('../middlewares')
 
-router.get('/', checkIfAuthenticated, async (req,res)=>{
-    let bag=new BagServices(req.session.user.id)
+router.get('/:user_id', async (req,res)=>{
+    let bag=new BagServices(req.params.user_id)
     const allItems = await bag.getAllItemsInBag()
-    console.log(allItems.toJSON())
-    res.render('shop/bag',{
-        'bag':allItems.toJSON()
-    })
+    // console.log(allItems.toJSON())
+    res.send(allItems)
 })
 
-router.get('/:product_id/add',checkIfAuthenticated, async(req,res)=>{
-    let bag=new BagServices(req.session.user.id)
+router.get('/:user_id/:product_id/add', async(req,res)=>{
+    let bag=new BagServices(req.params.user_id)
     await bag.addToBag(req.params.product_id)
-    req.flash('success_messages','Added to bag')
-    res.redirect('back')
+    res.send(bag)
 })
 
 router.get('/:product_id/remove',async (req,res)=>{

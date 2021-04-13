@@ -69,7 +69,7 @@ app.use(function (req, res, next) {
 
 const landingRoutes = require('./routes/landing')
 const productsRoutes = require('./routes/products')
-const usersRoutes = require('./routes/users')
+const vendorsRoutes = require('./routes/vendors')
 const shoppingBagRoutes = require('./routes/shoppingBag')
 const checkoutRoutes = require('./routes/checkout')
 const api={
@@ -80,7 +80,7 @@ const api={
 async function main() {
     app.use('/', landingRoutes);
     app.use('/products', productsRoutes)
-    app.use('/users', usersRoutes)
+    app.use('/vendors', vendorsRoutes)
     app.use('/bag', shoppingBagRoutes)
     app.use('/checkout',checkoutRoutes)
     app.use('/api/products',express.json(),api.products)

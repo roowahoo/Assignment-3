@@ -45,8 +45,12 @@ const Tag=bookshelf.model('Tag',{
     }
 })
 
-const User=bookshelf.model('User',{
-    tableName:'users'
+const Vendor=bookshelf.model('Vendor',{
+    tableName:'vendors'
+})
+
+const Shopper=bookshelf.model('Shopper',{
+    tableName:'shoppers'
 })
 
 const Bag=bookshelf.model('Bag',{
@@ -54,15 +58,15 @@ const Bag=bookshelf.model('Bag',{
     products(){
         return this.belongsTo('Product')
     },
-    users(){
-        return this.belongsTo('User')
+    shoppers(){
+        return this.belongsTo('Shopper')
     }
 })
 
 const Orders=bookshelf.model('Order',{
     tableName:'orders',
-    users(){
-        return this.belongsTo('User')
+    vendors(){
+        return this.belongsTo('Vendor')
     }
 
 })
@@ -73,4 +77,4 @@ const OrderItems=bookshelf.model('Order_item',{
         return this.belongsTo('Product')
     }
 })
-module.exports={Product,Category,Skintype,Brand,Tag,User,Bag,Orders,OrderItems}
+module.exports={Product,Category,Skintype,Brand,Tag,Vendor,Shopper,Bag,Orders,OrderItems}

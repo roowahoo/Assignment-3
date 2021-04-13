@@ -16,7 +16,7 @@ class BagServices {
         if (!item) {
             let newItem = new Bag()
             newItem.set('product_id', productId)
-            newItem.set('user_id', this.user_id)
+            newItem.set('shopper_id', this.user_id)
             newItem.set('quantity', 1)
             await newItem.save()
             return newItem

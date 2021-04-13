@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { User } = require('../models')
+const { Vendor } = require('../models')
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms')
 const crypto = require('crypto')
 
@@ -12,7 +12,7 @@ const getHashedPassword = (password) => {
 
 router.get('/register', (req, res) => {
     const registrationForm = createRegistrationForm();
-    res.render('users/register', {
+    res.render('vendors/register', {
         'form': registrationForm.toHTML(bootstrapField)
     })
 })
@@ -21,20 +21,20 @@ router.post('/register', (req, res) => {
     const registrationForm = createRegistrationForm()
     registrationForm.handle(req, {
         'success': async (form) => {
-            let { confirm_password, ...userData } = form.data
-            userData.password = getHashedPassword(userData.password)
-            const newUser = new User(userData)
-            // const user=new User({
+            let { confirm_password, ...vendorData } = form.data
+            vendorData.password = getHashedPassword(vendorData.password)
+            const newVendor = new Vendor(vendorData)
+            // const Vendor=new Vendor({
             //     'username':form.data.username,
             //     'email':form.data.email,
             //     'password':getHashedPassword(form.data.password)
             // })
-            await newUser.save()
+            await newVendor.save()
             req.flash('success_messages', 'Thank you for signing up')
-            res.redirect('/users/login')
+            res.redirect('/vendors/login')
         },
         'error': async (form) => {
-            res.render('users/register', {
+            res.render('vendors/register', {
                 'form': form.toHTML(bootstrapField)
             })
         }
@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 
 router.get('/login', (req, res) => {
     const loginForm = createLoginForm()
-    res.render('users/login', {
+    res.render('vendors/login', {
         'form': loginForm.toHTML(bootstrapField)
     })
 })
@@ -52,31 +52,31 @@ router.post('/login', (req, res) => {
     const loginForm = createLoginForm()
     loginForm.handle(req, {
         'success': async (form) => {
-            let user = await User.where({
+            let vendor = await Vendor.where({
                 'email': form.data.email
             }).fetch({
                 require: false
             })
-            if (user) {
-                if (user.get('password') === getHashedPassword(form.data.password)) {
+            if (vendor) {
+                if (vendor.get('password') === getHashedPassword(form.data.password)) {
                     req.session.user = {
-                        id: user.get('id'),
-                        username: user.get('username'),
-                        email: user.get('email'),
+                        id: vendor.get('id'),
+                        username: vendor.get('username'),
+                        email: vendor.get('email'),
                     }
                     req.flash('success_messages', 'Login successful')
-                    res.redirect('/users/profile')
+                    res.redirect('/vendors/profile')
                 } else {
                     req.flash('error_messages', 'Password is invalid')
-                    res.redirect('/users/login')
+                    res.redirect('/vendors/login')
                 }
             } else {
                 req.flash('error_messages', 'User not found')
-                res.redirect('/users/login')
+                res.redirect('/vendors/login')
             }
         },
         'error': (form) => {
-            res.render('users/login', {
+            res.render('vendors/login', {
                 'form': loginForm.toHTML(bootstrapField)
             })
         }
@@ -84,13 +84,13 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/profile', (req, res) => {
-    const user = req.session.user
-    if (!user) {
+    const vendor = req.session.user
+    if (!vendor) {
         req.flash('error_messages', 'You are not authorized to view this page')
-        res.redirect('/users/login')
+        res.redirect('/vendors/login')
     } else {
-        res.render('users/profile', {
-            'user': user
+        res.render('vendors/profile', {
+            'vendor': vendor
         })
     }
 })
@@ -98,7 +98,7 @@ router.get('/profile', (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.user = null
     req.flash('success_messages', 'Goodbye')
-    res.redirect('/users/login')
+    res.redirect('/vendors/login')
 })
 
 
