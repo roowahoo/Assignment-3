@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const BagServices = require('../../services/bag_services');
-const { checkIfAuthenticated } = require('../../middlewares')
 
 router.get('/:user_id', async (req,res)=>{
     let bag=new BagServices(req.params.user_id)

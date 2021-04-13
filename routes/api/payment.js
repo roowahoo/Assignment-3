@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const BagServices = require('../services/bag_services');
+const BagServices = require('../../services/bag_services');
 const Stripe=require('stripe')(process.env.STRIPE_SECRET_KEY)
 const bodyParser=require('body-parser')
 

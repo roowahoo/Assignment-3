@@ -33,5 +33,41 @@ router.post('/register', (req, res) => {
     })
 })
 
+router.post('/login', (req, res) => {
+    const loginForm = createLoginForm()
+    loginForm.handle(req, {
+        'success': async (form) => {
+            let shopper = await Shopper.where({
+                'email': req.body.email
+            }).fetch({
+                require: false
+            })
+            if (shopper) {
+                if (shopper.get('password') === getHashedPassword(req.body.password)) {
+                    // req.session.user = {
+                    //     id: vendor.get('id'),
+                    //     username: vendor.get('username'),
+                    //     email: vendor.get('email'),
+                    // }
+                    res.send(shopper)
+                } else {
+                    res.send('Invalid Password')
+                }
+            } else {
+                res.send('No user found')
+            }
+        },
+        'error': (form) => {
+            let errors = {};
+           for (let key in form.fields) {
+               if (form.fields[key].error) {
+                   errors[key] = form.fields[key].error;
+               }
+           }
+           res.send(JSON.stringify(errors));
+        }
+    })
+})
+
 module.exports=router
 
