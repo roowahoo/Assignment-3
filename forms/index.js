@@ -281,28 +281,7 @@ const createSearchForm=(categories, skintype, brands, tags)=>{
     })
 }
 
-const createAddressForm=()=>{
-    return forms.create({
-        'shipping_address':fields.string({
-            label:'Shipping Address',
-            required:true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        }),
-        'contact_number':fields.string({
-            label:'Contact Number',
-            required:true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        })
-
-    })
-}
 
 
 
-module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm, createAddressForm };
+module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm};

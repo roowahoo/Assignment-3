@@ -38,6 +38,11 @@ const getProductById = async (productId)=>{
 
 }
 
+const getAllProducts = async ()=>{
+    return await Product.fetchAll()
+
+}
+
 
 
 
@@ -46,5 +51,6 @@ module.exports = {
     getAllSkintypes,
     getAllBrands,
     getAllTags,
-    getProductById
+    getProductById,
+    getAllProducts
 }

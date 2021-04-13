@@ -53,7 +53,7 @@ app.use(function (req, res, next) {
 // app.use(csrf())
 const csurfInstance = csrf();
 app.use(function(req,res,next){
-    if(req.url==='/checkout/process_payment'){
+    if(req.url==='/checkout/process_payment' || req.url.slice(0,5)=='/api/'){
         return next()
     }
     csurfInstance(req,res,next)
@@ -72,6 +72,10 @@ const productsRoutes = require('./routes/products')
 const usersRoutes = require('./routes/users')
 const shoppingBagRoutes = require('./routes/shoppingBag')
 const checkoutRoutes = require('./routes/checkout')
+const api={
+    products:require('./routes/api/products'),
+    confirmOrder:require('./routes/api/confirmOrder')
+}
 
 async function main() {
     app.use('/', landingRoutes);
@@ -79,6 +83,8 @@ async function main() {
     app.use('/users', usersRoutes)
     app.use('/bag', shoppingBagRoutes)
     app.use('/checkout',checkoutRoutes)
+    app.use('/api/products',express.json(),api.products)
+    app.use('/api/confirmOrder',express.json(),api.confirmOrder)
 }
 
 main();
