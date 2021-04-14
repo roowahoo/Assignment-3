@@ -20,21 +20,27 @@ router.post('/:user_id',async (req,res)=>{
 
 router.get('/:user_id',async (req,res)=>{
     let order=new Orders()
-    const orderId=await ordersAccessLayer.getOrderIdByUserId(req.params.user_id)
-    res.send(orderId)
-    // let bag=new BagServices(req.params.user_id)
-    // const allItems = await bag.getAllItemsInBag()
-    // let orderItems=new OrderItems()
-    // for(let item of allItems){
-    //     orderItems.set({
-    //     'product_id':item.get('product_id'),
-    //     'quantity':item.get('quantity')
-    //     // to add in orders_id
+    const currentOrder=await ordersAccessLayer.getOrderIdByUserId(req.params.user_id)
+    // res.send(currentOrder)
+    // console.log(currentOrder)
+
+    let orderJson=currentOrder.toJSON()
+    console.log(orderJson[0].id)
+
+
+    let bag=new BagServices(req.params.user_id)
+    const allItems = await bag.getAllItemsInBag()
+    let orderItems=new OrderItems()
+    for(let item of allItems){
+        orderItems.set({
+        'product_id':item.get('product_id'),
+        'quantity':item.get('quantity'),
+        'order_id':orderJson[0].id
         
-    // })
-    // }
-    // orderItems.save()
-    // res.send(orderItems)
+    })
+    }
+    orderItems.save()
+    res.send(orderItems)
 
 })
 
