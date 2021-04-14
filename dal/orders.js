@@ -3,12 +3,16 @@ const { Orders} = require('../models')
 const getOrderIdByUserId = async (userId)=>{
     const order=await Orders.collection().where({
         'shopper_id':userId
+    }).query(function(order){
+        order.orderBy('id','DESC').limit(1)
     }).fetch({
         require:true
-    }).limit(1)
+    })
     return order
 
 }
+
+
 module.exports={
     getOrderIdByUserId
 }
