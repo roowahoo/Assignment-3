@@ -15,15 +15,14 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('order_items',{
+  return db.createTable('orders',{
       id:{type:'int',unsigned:true,primaryKey:true,autoIncrement:true},
-      product_id:{
+      shopper_id:{
           type:'int',
           notNull:true,
-          unsigned:true,
           foreignKey:{
-              name:'order_items_product_fk',
-              table:'products',
+              name:'orders_shoppers_fk',
+              table:'shoppers',
               mapping:'id',
               rules:{
                   OnDelete:'CASCADE',
@@ -31,7 +30,11 @@ exports.up = function(db) {
               }
           }
       },
-      quantity:{type:'int',unsigned:true}
+      shipping_address:{type:'string',length:500},
+      contact_number:{type:'string',length:100},
+      date:{type:'datetime'},
+      amount:{type:'int',unsigned:true},
+      status:{type:'string',length:100}
   })
 };
 

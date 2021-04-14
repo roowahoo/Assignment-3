@@ -67,6 +67,9 @@ const Orders=bookshelf.model('Order',{
     tableName:'orders',
     vendors(){
         return this.belongsTo('Vendor')
+    },
+    shoppers(){
+        return this.belongsTo('Shopper')
     }
 
 })
@@ -75,6 +78,9 @@ const OrderItems=bookshelf.model('Order_item',{
     tableName:'order_items',
     products(){
         return this.belongsTo('Product')
+    },
+    orders(){
+        return this.belongsTo('Order')
     }
 })
 module.exports={Product,Category,Skintype,Brand,Tag,Vendor,Shopper,Bag,Orders,OrderItems}
