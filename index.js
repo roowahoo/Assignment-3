@@ -73,10 +73,10 @@ const vendorsRoutes = require('./routes/vendors')
 
 const api={
     products:require('./routes/api/products'),
-    checkout:require('./routes/api/checkout'),
+    order:require('./routes/api/order'),
     shoppers:require('./routes/api/shoppers'),
     shoppingBag:require('./routes/api/shoppingBag'),
-    payment:require('./routes/api/payment')
+    checkout:require('./routes/api/checkout')
 }
 
 async function main() {
@@ -84,10 +84,10 @@ async function main() {
     app.use('/products', productsRoutes)
     app.use('/vendors', vendorsRoutes)
     app.use('/api/products',express.json(),api.products)
-    app.use('/api/checkout',express.json(),api.checkout)
+    app.use('/api/order',express.json(),api.order)
     app.use('/api/shoppers',express.json(),api.shoppers)
     app.use('/api/bag',express.json(),api.shoppingBag)
-    app.use('/api/payment',express.json(),api.payment)
+    app.use('/api/checkout',api.checkout)
 }
 
 main();

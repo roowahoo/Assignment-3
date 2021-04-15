@@ -1,66 +1,75 @@
-const express = require('express')
-const router = express.Router()
-
-const { Orders, OrderItems, Bag } = require('../../models')
+const express = require('express');
+const router = express.Router();
 const BagServices = require('../../services/bag_services');
-const ordersAccessLayer = require('../../dal/orders')
+const Stripe=require('stripe')(process.env.STRIPE_SECRET_KEY)
+const bodyParser=require('body-parser')
 
-router.post('/:user_id', async (req, res) => {
-    let order = new Orders()
-    order.set('shopper_id', req.params.user_id)
-    order.set('shipping_address', req.body.shipping_address)
-    order.set('contact_number', req.body.contact_number)
-    order.set('date', new Date())
-    order.set('amount', 0)
-    order.set('status', 'unpaid')
-    await order.save()
-    res.send(order)
-
-})
-
-router.get('/:user_id', async (req, res) => {
-    // let order = new Orders()
-    const currentOrder = await ordersAccessLayer.getOrderIdByUserId(req.params.user_id)
-    // res.send(currentOrder)
-    // console.log(currentOrder.toJSON())
-
-    let orderJson = currentOrder.toJSON()
-    // console.log(orderJson.id)
-
-
-    let bag = new BagServices(req.params.user_id)
-    const allItems = await bag.getAllItemsInBag()
-    // let orderItems = new OrderItems()
-    let sum = [];
-    let eachItemAmt;
-    for (let item of allItems) {
-        let orderItems = new OrderItems()
-        orderItems.set({
-            'product_id': item.get('product_id'),
+router.get('/:user_id',async (req,res)=>{
+    const bag=new BagServices(req.params.user_id)
+    let bagItems=await bag.getAllItemsInBag()
+    let orderItems=[]
+    let meta=[]
+    for (let item of bagItems){
+        const orderItem={
+            'name': item.related('products').get('name'),
+            'amount': item.related('products').get('price'),
             'quantity': item.get('quantity'),
-            'order_id': orderJson.id
-        })
-        console.log(orderItems.toJSON())
-        orderItems.save()
-        
-        
-        // ---------UPDATE AMOUNT IN ORDERS---------
-        eachItemAmt = item.related('products').get('price') * (item.get('quantity'))
-        // console.log(eachItemAmt)
-        sum.push(eachItemAmt)
-        // console.log(sum)
-        let totalAmount = 0;
-        for (let i of sum) {
-            totalAmount += i
-            // console.log(totalAmount)
+            'currency': 'SGD'
         }
-        currentOrder.set('amount', totalAmount)
-
+        if (item.related('products').get('image_url')){
+            orderItem.images=[item.related('products').get('image_url')]
+        }
+        orderItems.push(orderItem)
+        meta.push({
+            'product_id':item.get('product_id'),
+            'quantity':item.get('quantity'),
+            'customer':'5'
+        })
     }
-    
-    await currentOrder.save()
-    res.send(currentOrder)
-    
+    let metaData = JSON.stringify(meta);
+    const payment = {
+        payment_method_types: ['card'],
+        line_items: orderItems,
+        success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
+        cancel_url: process.env.STRIPE_ERROR_URL,
+        metadata: {
+            'orders': metaData
+        }
+    }
+    let stripeSession = await Stripe.checkout.sessions.create(payment)
+    res.render('shop/checkout', {
+        'sessionId': stripeSession.id,
+        'publishableKey': process.env.STRIPE_PUBLISHABLE_KEY
+    })
+
 })
 
-module.exports = router
+// Called by stripe not us
+router.post('/process_payment', bodyParser.raw({type:'application/json'}),
+async(req,res)=>{
+    let payload=req.body
+    let endpointSecret=process.env.STRIPE_ENDPOINT_SECRET
+    let sigHeader=req.headers['stripe-signature']
+    let event;
+    try {
+        event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
+
+    } catch (e) {
+        res.send({
+            'error': e.message
+        })
+        console.log(e.message)
+    }
+    if (event.type == 'checkout.session.completed') {
+        let stripeSession = event.data.object;
+
+        // if(stripeSession.payment_status==='paid'){
+        //     const currentOrder = await ordersAccessLayer.getOrderIdByUserId(user_id)
+
+        // }
+        console.log(stripeSession);
+        console.log('working')
+    }
+    res.send({ received: true })
+})
+module.exports=router
