@@ -55,9 +55,7 @@ router.get('/:user_id', async (req, res) => {
             // console.log(totalAmount)
         }
         currentOrder.set('amount', totalAmount)
-        console.log(item.get("product_id"))
-        await bag.removeFromBag(item.get('product_id'))
-
+        
     }
     
     await currentOrder.save()
