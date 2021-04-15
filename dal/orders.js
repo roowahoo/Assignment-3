@@ -1,7 +1,7 @@
 const { Orders} = require('../models')
 
 const getOrderIdByUserId = async (userId)=>{
-    const order=await Orders.collection().where({
+    const order=await Orders.where({
         'shopper_id':userId
     }).query(function(order){
         order.orderBy('id','DESC').limit(1)
