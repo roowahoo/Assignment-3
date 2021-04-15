@@ -11,8 +11,8 @@ router.post('/:user_id', async (req, res) => {
     order.set('shipping_address', req.body.shipping_address)
     order.set('contact_number', req.body.contact_number)
     order.set('date', new Date())
-    order.set('amount', req.body.amount)
-    order.set('status', 'Unpaid')
+    order.set('amount', 0)
+    order.set('status', 'unpaid')
     await order.save()
     res.send(order)
 
@@ -25,21 +25,26 @@ router.get('/:user_id', async (req, res) => {
     // console.log(currentOrder.toJSON())
 
     let orderJson = currentOrder.toJSON()
-    console.log(orderJson.id)
+    // console.log(orderJson.id)
 
 
     let bag = new BagServices(req.params.user_id)
     const allItems = await bag.getAllItemsInBag()
-    let orderItems = new OrderItems()
+    // let orderItems = new OrderItems()
     let sum = [];
     let eachItemAmt;
     for (let item of allItems) {
+        let orderItems = new OrderItems()
         orderItems.set({
             'product_id': item.get('product_id'),
             'quantity': item.get('quantity'),
             'order_id': orderJson.id
         })
+        console.log(orderItems.toJSON())
+        orderItems.save()
         
+        
+        // ---------UPDATE AMOUNT IN ORDERS---------
         eachItemAmt = item.related('products').get('price') * (item.get('quantity'))
         // console.log(eachItemAmt)
         sum.push(eachItemAmt)
@@ -49,17 +54,12 @@ router.get('/:user_id', async (req, res) => {
             totalAmount += i
             // console.log(totalAmount)
         }
-
-        // console.log((item.related('products').get('price')) * (item.get('quantity')))
-
         currentOrder.set('amount', totalAmount)
 
     }
-
-    orderItems.save()
-    res.send(orderItems)
+    
     await currentOrder.save()
-    console.log(currentOrder.toJSON())
+    res.send(currentOrder)
     
 })
 
