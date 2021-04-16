@@ -68,7 +68,8 @@ router.get('/shop', async (req, res) => {
             }
 
             let results = await queries.fetch({
-                withRelated: ['category', 'skintype', 'brand', 'tags']
+                withRelated
+                : ['category', 'skintype', 'brand', 'tags']
             })
             // console.log(queries)
             res.render('shop/index', {

@@ -302,12 +302,50 @@ const createOrderSearchForm=()=>{
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
+            },
+            widget:widgets.select(),
+            choices:{
+                Unpaid:'Unpaid',
+                Paid:'Paid'
             }
         }),
     })
 }
 
+const editOrderForm=()=>{
+    return forms.create({
+        
+        'product_name': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        
+        'amount': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'status': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget:widgets.select(),
+            choices:{
+                Unpaid:'Unpaid',
+                Paid:'Paid'
+            }
+        }),
+    })
+
+}
 
 
 
-module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm, createOrderSearchForm};
+module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm, createOrderSearchForm,editOrderForm};

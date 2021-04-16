@@ -12,7 +12,17 @@ const getOrderIdByUserId = async (userId)=>{
 
 }
 
+const getOrderById =async(orderId)=>{
+    const order=await Orders.where({
+        'id':orderId
+    }).fetch({
+        require:true
+    })
+    return order
+}
+
 
 module.exports={
-    getOrderIdByUserId
+    getOrderIdByUserId,
+    getOrderById
 }

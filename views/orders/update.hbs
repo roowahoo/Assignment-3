@@ -1,0 +1,12 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<form method="POST">
+    {{!-- {{{form}}} --}}
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+</form>
+
+{{/block}}
+
+{{/extends}}

@@ -2,7 +2,7 @@
 {{#block 'content'}}
 <form method='GET'>
     {{{form}}}
-    <input type='submit' class='btn btn-primary' value='search'/>
+    <input type='submit' class='btn btn-primary' value='search' />
 </form>
 <table class='table'>
     <thead>
@@ -26,7 +26,12 @@
             <td>{{this.orders.contact_number}}</td>
             <td>{{this.orders.amount}}</td>
             <td>{{this.orders.status}}</td>
+            <td>
+                <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
+            </td>
         </tr>
+
+
         {{/each}}
     </tbody>
 

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { Orders, OrderItems, Shopper } = require('../models')
-const { bootstrapField, createOrderSearchForm } = require('../forms')
+const { bootstrapField, createOrderSearchForm, editOrderForm } = require('../forms')
 const { checkIfAuthenticated } = require('../middlewares')
 const ordersAccessLayer = require('../dal/orders')
 const shoppersAccessLayer = require('../dal/shoppers')
@@ -65,6 +65,20 @@ router.get('/', async (req, res) => {
             })
 
         }
+    })
+})
+
+router.get('/:order_id/update',async (req,res)=>{
+    const orderToEdit= await ordersAccessLayer.getOrderById(req.params.order_id)
+    // res.send(orderToEdit)
+    const editForm=editOrderForm()
+    editOrderForm.fields.product_name.value=orderToEdit.related('products').get('name')
+    editOrderForm.fields.amount.value=orderToEdit.get('amount')
+    editOrderForm.fields.status.value=orderToEdit.get('status')
+
+    res.render('orders/update',{
+        'order':orderToEdit.toJSON(),
+        // 'form':editOrderForm.toHTML(bootstrapField)
     })
 })
 
