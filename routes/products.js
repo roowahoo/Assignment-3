@@ -54,13 +54,13 @@ router.get('/shop', async (req, res) => {
                 
                 queries=queries.where('date_of_manufacture','=',form.data.date_of_manufacture)
             }
-            if (form.data.category_id !== 0){
+            if (form.data.category_id !== '0'){
                 queries=queries.where('category_id','=',form.data.category_id)
             }
-            if (form.data.skintype_id !== 0){
+            if (form.data.skintype_id !== '0'){
                 queries=queries.where('skintype_id','=',form.data.skintype_id)
             }
-            if (form.data.brand_id !== 0){
+            if (form.data.brand_id !== '0'){
                 queries=queries.where('brand_id','=',form.data.brand_id)
             }
             if (form.data.tags){

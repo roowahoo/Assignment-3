@@ -7,3 +7,6 @@ const getShopperById=async(shopperId)=>{
     })
     return shopper
 }
+module.exports={
+    getShopperById
+}

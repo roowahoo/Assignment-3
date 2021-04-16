@@ -1,5 +1,9 @@
 {{#extends 'base'}}
 {{#block 'content'}}
+<form method='GET'>
+    {{{form}}}
+    <input type='submit' class='btn btn-primary' value='search'/>
+</form>
 <table class='table'>
     <thead>
         <tr>
@@ -17,6 +21,11 @@
         <tr>
             <td>{{this.products.name}}</td>
             <td>{{this.quantity}}</td>
+            <td>{{this.orders.shoppers.username}}</td>
+            <td>{{this.orders.shipping_address}}</td>
+            <td>{{this.orders.contact_number}}</td>
+            <td>{{this.orders.amount}}</td>
+            <td>{{this.orders.status}}</td>
         </tr>
         {{/each}}
     </tbody>
