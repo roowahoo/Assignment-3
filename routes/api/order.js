@@ -12,7 +12,7 @@ router.post('/:user_id', async (req, res) => {
     order.set('contact_number', req.body.contact_number)
     order.set('date', new Date())
     order.set('amount', 0)
-    order.set('status', 'unpaid')
+    order.set('status', 'Unpaid')
     await order.save()
     res.send(order)
 

@@ -30,8 +30,39 @@ router.get('/', async (req, res) => {
         },
         'success': async (form) => {
 
+            if(form.data.product_name){
+                queries=queries.query('join','products','product_id','products.id').where('name','like','%'+form.data.product_name+'%')
+            }
+            if(form.data.amount){
+                queries=queries.query('join','orders','order_id','orders.id').where('amount','>=',form.data.amount)
+            }
+            if(form.data.status){
+                queries=queries.query('join','orders','order_id','orders.id').where('status','=',form.data.status)
+            }
+
+            try{
+                let results=await queries.fetch({
+                withRelated: ['orders', 'products', 'orders.shoppers']
+            })
+            res.render('orders/index', {
+                'orders': results.toJSON(),
+                'form': form.toHTML(bootstrapField),
+            })
+
+            }catch(e){
+                res.render('orders/noResults')
+            }
+
         },
         'error': async (form) => {
+            let results = await queries.fetch({
+                withRelated: ['orders', 'products', 'orders.shoppers']
+            })
+
+            res.render('orders/index', {
+                'orders': results.toJSON(),
+                'form': form.toHTML(bootstrapField),
+            })
 
         }
     })

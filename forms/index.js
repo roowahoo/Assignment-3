@@ -290,7 +290,14 @@ const createOrderSearchForm=()=>{
                 label: ['form-label']
             }
         }),
-        'quantity': fields.string({
+        'amount': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'status': fields.string({
             required: false,
             errorAfterField: true,
             cssClasses: {

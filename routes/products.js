@@ -34,41 +34,41 @@ router.get('/shop', async (req, res) => {
 
         },
         'success': async (form) => {
-            if (form.data.name){
-                queries=queries.where('name','like','%'+form.data.name+'%')
+            if (form.data.name) {
+                queries = queries.where('name', 'like', '%' + form.data.name + '%')
                 console.log(queries)
             }
-            if (form.data.min_price){
-                
-                queries=queries.where('price','>=',form.data.min_price)
+            if (form.data.min_price) {
+
+                queries = queries.where('price', '>=', form.data.min_price)
             }
-            if (form.data.max_price){
-                
-                queries=queries.where('price','<=',form.data.max_price)
+            if (form.data.max_price) {
+
+                queries = queries.where('price', '<=', form.data.max_price)
             }
-            if (form.data.stock){
-                
-                queries=queries.where('stock','>=',form.data.stock)
+            if (form.data.stock) {
+
+                queries = queries.where('stock', '>=', form.data.stock)
             }
-            if (form.data.date_of_manufacture){
-                
-                queries=queries.where('date_of_manufacture','=',form.data.date_of_manufacture)
+            if (form.data.date_of_manufacture) {
+
+                queries = queries.where('date_of_manufacture', '=', form.data.date_of_manufacture)
             }
-            if (form.data.category_id !== '0'){
-                queries=queries.where('category_id','=',form.data.category_id)
+            if (form.data.category_id !== '0') {
+                queries = queries.where('category_id', '=', form.data.category_id)
             }
-            if (form.data.skintype_id !== '0'){
-                queries=queries.where('skintype_id','=',form.data.skintype_id)
+            if (form.data.skintype_id !== '0') {
+                queries = queries.where('skintype_id', '=', form.data.skintype_id)
             }
-            if (form.data.brand_id !== '0'){
-                queries=queries.where('brand_id','=',form.data.brand_id)
+            if (form.data.brand_id !== '0') {
+                queries = queries.where('brand_id', '=', form.data.brand_id)
             }
-            if (form.data.tags){
-                queries=queries.query('join','products_tags','id','product_id').where('tag_id','in',form.data.tags.split(','))
+            if (form.data.tags) {
+                queries = queries.query('join', 'products_tags', 'id', 'product_id').where('tag_id', 'in', form.data.tags.split(','))
             }
 
-            let results=await queries.fetch({
-                withRelated:['category', 'skintype', 'brand', 'tags']
+            let results = await queries.fetch({
+                withRelated: ['category', 'skintype', 'brand', 'tags']
             })
             // console.log(queries)
             res.render('shop/index', {
@@ -76,6 +76,7 @@ router.get('/shop', async (req, res) => {
                 'form': form.toHTML(bootstrapField)
 
             })
+
 
         },
         'error': async (form) => {
