@@ -65,9 +65,6 @@ const Bag=bookshelf.model('Bag',{
 
 const Orders=bookshelf.model('Order',{
     tableName:'orders',
-    vendors(){
-        return this.belongsTo('Vendor')
-    },
     shoppers(){
         return this.belongsTo('Shopper')
     }

@@ -1,4 +1,4 @@
-const { Orders} = require('../models')
+const { Orders, OrderItems} = require('../models')
 
 const getOrderIdByUserId = async (userId)=>{
     const order=await Orders.where({
@@ -12,7 +12,15 @@ const getOrderIdByUserId = async (userId)=>{
 
 }
 
+const getOrderDetails=async ()=>{
+    const details=await OrderItems.fetchAll().map((orders)=>{
+        return [orders.get('shopper_id'),orders.get('shipping_address'),orders.get('contact_number'),orders.get('date'),orders.get('amount'),orders.get('status')]
+    })
+    return details
+}
+
 
 module.exports={
-    getOrderIdByUserId
+    getOrderIdByUserId,
+    getOrderDetails
 }

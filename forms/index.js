@@ -281,7 +281,26 @@ const createSearchForm=(categories, skintype, brands, tags)=>{
     })
 }
 
+const createOrderSearchForm=()=>{
+    return forms.create({
+        'product_name': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'quantity': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+    })
+}
 
 
 
-module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm};
+
+module.exports = { createProductForm, bootstrapField, createRegistrationForm, createLoginForm, createSearchForm, createOrderSearchForm};
