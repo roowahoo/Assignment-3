@@ -3,6 +3,7 @@ const router = express.Router()
 const { Vendor } = require('../models')
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms')
 const crypto = require('crypto')
+const vendorsDataLayer=require('../dal/vendors')
 
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256')
@@ -52,11 +53,12 @@ router.post('/login', (req, res) => {
     const loginForm = createLoginForm()
     loginForm.handle(req, {
         'success': async (form) => {
-            let vendor = await Vendor.where({
-                'email': form.data.email
-            }).fetch({
-                require: false
-            })
+            // let vendor = await Vendor.where({
+            //     'email': form.data.email
+            // }).fetch({
+            //     require: false
+            // })
+            let vendor=await vendorsDataLayer.getVendor(form.data.email)
             if (vendor) {
                 if (vendor.get('password') === getHashedPassword(form.data.password)) {
                     req.session.user = {
