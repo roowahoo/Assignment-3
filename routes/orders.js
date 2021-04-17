@@ -109,6 +109,26 @@ router.post('/:order_id/update', async (req, res) => {
 
 })
 
+router.get('/:order_id/delete',async (req,res)=>{
+    const orderToDelete = await ordersAccessLayer.getOrderById(req.params.order_id)
+    res.render('orders/delete',{
+        'order':orderToDelete
+    })
+
+})
+
+router.post('/:order_id/delete',async (req,res)=>{
+    const orderItemsToDelete=await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
+    const orderToDelete = await ordersAccessLayer.getOrderById(req.params.order_id)
+    console.log(orderItemsToDelete.toJSON())
+    for(let item of orderItemsToDelete){
+        await item.destroy()
+    }
+    await orderToDelete.destroy()
+    req.flash('success_messages', `Order ${orderToDelete.get('id')} has been deleted`)
+    res.redirect('/orders')
+})
+
 
 
 module.exports = router
