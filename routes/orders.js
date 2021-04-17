@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
             }).fetch({
                 withRelated: ['orders', 'products', 'orders.shoppers']
             })
-            console.log(results.toJSON())
+            
 
             res.render('orders/index', {
                 'orders': results.toJSON(),
@@ -36,10 +36,13 @@ router.get('/', async (req, res) => {
             if (form.data.product_name) {
                 queries = queries.query('join', 'products', 'product_id', 'products.id').where('name', 'like', '%' + form.data.product_name + '%')
             }
-            if (form.data.amount) {
+            if (form.data.amount && form.data.status !== 'null' ) {
+                queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('amount', '>=', form.data.amount).where('status', '=', form.data.status)
+            }
+            if (form.data.amount && form.data.status==='null') {
                 queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('amount', '>=', form.data.amount)
             }
-            if (form.data.status !== 'none') {
+            if (form.data.status !== 'null' && !form.data.amount) {
                 queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('status', '=', form.data.status)
             }
 
@@ -49,10 +52,13 @@ router.get('/', async (req, res) => {
                 }).fetch({
                     withRelated: ['orders', 'products', 'orders.shoppers']
                 })
+                console.log(results.toJSON())
                 res.render('orders/index', {
                     'orders': results.toJSON(),
                     'form': form.toHTML(bootstrapField),
                 })
+                
+                
 
             } catch (e) {
                 res.render('orders/noResults')

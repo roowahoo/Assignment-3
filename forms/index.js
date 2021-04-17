@@ -305,7 +305,7 @@ const createOrderSearchForm=()=>{
             },
             widget:widgets.select(),
             choices:{
-                none:'---',
+                null:'',
                 Unpaid:'Unpaid',
                 Paid:'Paid'
             }
