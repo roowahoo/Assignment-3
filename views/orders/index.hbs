@@ -21,7 +21,7 @@
         {{#each orders}}
         <tr>
             
-            <td>{{this.orders.id}}</td>
+            <td><a href="/orders/{{this.orders.id}}">{{this.orders.id}}</a></td>
             <td>{{this.orders.shoppers.username}}</td>
             <td>{{this.orders.shipping_address}}</td>
             <td>{{this.orders.contact_number}}</td>
@@ -29,7 +29,7 @@
             <td>{{this.orders.status}}</td>
             <td>{{this.orders.date}}</td>
             <td>
-                <a href="/orders/{{this.orders.id}}" class="btn btn-primary btn-sm">Update</a>
+                <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
             </td>
         </tr>
         {{/each}}

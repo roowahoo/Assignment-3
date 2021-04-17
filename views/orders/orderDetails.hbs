@@ -1,13 +1,13 @@
-
-
 {{#extends 'base'}}
 {{#block 'content'}}
-<h5>Customer name: {{shopper.shoppers.username}}</h5>
-<h5>Shipping Address: {{shopper.shoppers.shipping_address}}</h5>
-<h5>Email: {{shopper.shoppers.email}}</h5>
-<h5>Contact: {{shopper.contact_number}}</h5>
-<h5>Date: {{shopper.date}}</h5>
-<h5>Status: {{shopper.status}}</h5>
+<div class='m-5'>
+    <h5>Customer name: {{order.shoppers.username}}</h5>
+    <h5>Shipping Address: {{order.shipping_address}}</h5>
+    <h5>Email: {{order.shoppers.email}}</h5>
+    <h5>Contact: {{order.contact_number}} </h5>
+    <h5>Date: {{order.date}}</h5>
+    <h5>Status: {{order.status}}</h5>
+</div>
 <table class='table'>
     <thead>
         <tr>
@@ -21,12 +21,12 @@
     <tbody>
         {{#each products}}
         <tr>
-            <td><img class="img-thumbnail" src="{{this.products.image_url}}"/></td>
+            <td><img class="img-thumbnail" src="{{this.products.image_url}}" /></td>
             <td>{{this.product_id}}</td>
             <td>{{this.products.name}}</td>
             <td>{{this.quantity}}</td>
             <td>{{this.products.price}}</td>
-            
+
             {{!-- <td>
                 <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
             </td> --}}

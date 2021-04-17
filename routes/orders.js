@@ -70,29 +70,43 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/:order_id',async (req,res)=>{
-    let currentOrder=await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
-    let shopperDetails=await ordersAccessLayer.getOrderById(req.params.order_id)
+router.get('/:order_id', async (req, res) => {
+    let currentOrder = await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
+    let orderDetails = await ordersAccessLayer.getOrderById(req.params.order_id)
     // console.log(currentOrder.toJSON())
-    console.log(shopperDetails.toJSON())
-    res.render('orders/orderDetails',{
-        'products':currentOrder.toJSON(),
-        'shopper':shopperDetails.toJSON()
+    console.log(orderDetails.toJSON())
+    res.render('orders/orderDetails', {
+        'products': currentOrder.toJSON(),
+        'order': orderDetails.toJSON()
     })
 })
 
 router.get('/:order_id/update', async (req, res) => {
     const orderToEdit = await ordersAccessLayer.getOrderById(req.params.order_id)
     // res.send(orderToEdit)
-    const editForm = editOrderForm()
-    editForm.fields.shipping_address.value = orderToEdit.get('shipping_address')
-    editForm.fields.amount.value = orderToEdit.get('amount')
-    editForm.fields.status.value = orderToEdit.get('status')
+    // const editForm = editOrderForm()
+    // editForm.fields.customer_name.value = orderToEdit.related('shoppers').get('username')
+    // editForm.fields.shipping_address.value = orderToEdit.get('shipping_address')
+    // editForm.fields.email.value = orderToEdit.related('shoppers').get('email')
+    // editForm.fields.contact.value = orderToEdit.get('contact_number')
+    // editForm.fields.status.value = orderToEdit.get('status')
 
     res.render('orders/update', {
         'order': orderToEdit.toJSON(),
-        'form': editForm.toHTML(bootstrapField)
+        // 'form': editForm.toHTML(bootstrapField)
     })
+    
+})
+
+router.post('/:order_id/update', async (req, res) => {
+    const orderToEdit = await ordersAccessLayer.getOrderById(req.params.order_id)
+
+    orderToEdit.set('shipping_address', req.body.shipping_address)
+    orderToEdit.set('status', req.body.status)
+    orderToEdit.save()
+    req.flash('success_messages', `Order ${orderToEdit.get('id')} has been updated`)
+    res.redirect('/orders')
+
 })
 
 

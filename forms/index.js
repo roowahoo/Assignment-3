@@ -306,8 +306,8 @@ const createOrderSearchForm=()=>{
             widget:widgets.select(),
             choices:{
                 null:'',
-                Unpaid:'Unpaid',
-                Paid:'Paid'
+                unpaid:'Unpaid',
+                paid:'Paid'
             }
         }),
     })
@@ -315,32 +315,47 @@ const createOrderSearchForm=()=>{
 
 const editOrderForm=()=>{
     return forms.create({
-        
+        'customer_name': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
         'shipping_address': fields.string({
-            required: true,
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'email': fields.string({
+            required: false,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             }
         }),
         
-        'amount': fields.string({
-            required: true,
+        'contact': fields.string({
+            required: false,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             }
         }),
         'status': fields.string({
-            required: true,
+            required: false,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
             widget:widgets.select(),
             choices:{
+                null:'',
                 Unpaid:'Unpaid',
-                Paid:'Paid'
+                Paid:'Paid',
+
             }
         }),
     })

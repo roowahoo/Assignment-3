@@ -1,10 +1,39 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<form method="POST">
-    {{{form}}}
+<form method='POST'>
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-
+    <div class='m-5'>
+        <div>
+            <label>Customer name:</label>
+            <input type='text' value='{{order.shoppers.username}}' class='form-control' disabled />
+        </div>
+        <div>
+            <label>Shipping Address:</label>
+            <input type='text' value='{{order.shipping_address}}' class='form-control' name='shipping_address' />
+        </div>
+        <div>
+            <label>Email:</label>
+            <input type='text' value='{{order.shoppers.email}}' class='form-control' disabled />
+        </div>
+        <div>
+            <label>Contact:</label>
+            <input type='text' value='{{order.contact_number}}' class='form-control' disabled />
+        </div>
+        <div>
+            <label>Date: </label>
+            <input type='text' value='{{order.date}}' class='form-control' disabled />
+        </div>
+        <div>
+            <label>Status:</label>
+            <select class='form-control' value='{{order.status}}' name='status'>
+                <option value=''></option>
+                <option value='Paid'>Paid</option>
+                <option value='Unpaid'>Unpaid</option>
+            </select>
+        </div>
+        <input type="submit" value="Update" class="btn btn-primary mt-3"/>
+    </div>
 </form>
 
 {{/block}}
