@@ -7,34 +7,47 @@
 <table class='table'>
     <thead>
         <tr>
-            <th>Product Name</th>
-            <th>Quantity</th>
+            
+            <th>Order Id</th>
             <th>Customer Name</th>
             <th>Shipping Address</th>
             <th>Contact</th>
             <th>Amount</th>
             <th>Status</th>
+            <th>Date</th>
         </tr>
     </thead>
     <tbody>
         {{#each orders}}
         <tr>
-            <td>{{this.products.name}}</td>
-            <td>{{this.quantity}}</td>
+            
+            <td>{{this.orders.id}}</td>
             <td>{{this.orders.shoppers.username}}</td>
             <td>{{this.orders.shipping_address}}</td>
             <td>{{this.orders.contact_number}}</td>
             <td>{{this.orders.amount}}</td>
             <td>{{this.orders.status}}</td>
+            <td>{{this.orders.date}}</td>
             <td>
                 <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
             </td>
         </tr>
-
-
         {{/each}}
     </tbody>
 
+</table>
+<table class='table' style="visibility:hidden">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orders}}
+        <td>{{this.products.name}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>
 {{/block}}
 {{/extends}}

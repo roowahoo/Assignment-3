@@ -305,6 +305,7 @@ const createOrderSearchForm=()=>{
             },
             widget:widgets.select(),
             choices:{
+                none:'---',
                 Unpaid:'Unpaid',
                 Paid:'Paid'
             }
@@ -315,7 +316,7 @@ const createOrderSearchForm=()=>{
 const editOrderForm=()=>{
     return forms.create({
         
-        'product_name': fields.string({
+        'shipping_address': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
