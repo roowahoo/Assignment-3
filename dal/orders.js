@@ -16,13 +16,25 @@ const getOrderById =async(orderId)=>{
     const order=await Orders.where({
         'id':orderId
     }).fetch({
-        require:true
+        require:true,
+        withRelated:['shoppers']
     })
     return order
+}
+
+const getOrderItemsByOrderId=async(orderId)=>{
+    const orderItems=await OrderItems.collection().where({
+        'order_id':orderId
+    }).fetch({
+        require:true,
+        withRelated:['orders', 'products', 'orders.shoppers']
+    })
+    return orderItems
 }
 
 
 module.exports={
     getOrderIdByUserId,
-    getOrderById
+    getOrderById,
+    getOrderItemsByOrderId
 }

@@ -29,14 +29,14 @@
             <td>{{this.orders.status}}</td>
             <td>{{this.orders.date}}</td>
             <td>
-                <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                <a href="/orders/{{this.orders.id}}" class="btn btn-primary btn-sm">Update</a>
             </td>
         </tr>
         {{/each}}
     </tbody>
 
 </table>
-<table class='table' style="visibility:hidden">
+{{!-- <table class='table' style="visibility:hidden">
     <thead>
         <tr>
             <th>Product Name</th>
@@ -48,6 +48,6 @@
         </tr>
         {{/each}}
     </tbody>
-</table>
+</table> --}}
 {{/block}}
 {{/extends}}

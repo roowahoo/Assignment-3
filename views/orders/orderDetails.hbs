@@ -1,0 +1,40 @@
+
+
+{{#extends 'base'}}
+{{#block 'content'}}
+<h5>Customer name: {{shopper.shoppers.username}}</h5>
+<h5>Shipping Address: {{shopper.shoppers.shipping_address}}</h5>
+<h5>Email: {{shopper.shoppers.email}}</h5>
+<h5>Contact: {{shopper.contact_number}}</h5>
+<h5>Date: {{shopper.date}}</h5>
+<h5>Status: {{shopper.status}}</h5>
+<table class='table'>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Product Id</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td><img class="img-thumbnail" src="{{this.products.image_url}}"/></td>
+            <td>{{this.product_id}}</td>
+            <td>{{this.products.name}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.products.price}}</td>
+            
+            {{!-- <td>
+                <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
+            </td> --}}
+        </tr>
+        {{/each}}
+    </tbody>
+
+</table>
+<a href='/orders' class="btn btn-success btn-sm">Go Back</a>
+{{/block}}
+{{/extends}}

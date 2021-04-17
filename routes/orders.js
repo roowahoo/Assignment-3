@@ -10,11 +10,6 @@ const shoppersAccessLayer = require('../dal/shoppers')
 router.get('/', async (req, res) => {
     const searchForm = createOrderSearchForm()
     let queries = OrderItems.collection()
-    // let results = await queries.fetch({
-    //     withRelated: ['orders', 'products', "orders.shoppers"]
-    // })
-    // console.log(results)    
-    // res.send(results.toJSON())
 
     searchForm.handle(req, {
         'empty': async (form) => {
@@ -23,7 +18,7 @@ router.get('/', async (req, res) => {
             }).fetch({
                 withRelated: ['orders', 'products', 'orders.shoppers']
             })
-            
+
 
             res.render('orders/index', {
                 'orders': results.toJSON(),
@@ -36,33 +31,27 @@ router.get('/', async (req, res) => {
             if (form.data.product_name) {
                 queries = queries.query('join', 'products', 'product_id', 'products.id').where('name', 'like', '%' + form.data.product_name + '%')
             }
-            if (form.data.amount && form.data.status !== 'null' ) {
+            if (form.data.amount && form.data.status !== 'null') {
                 queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('amount', '>=', form.data.amount).where('status', '=', form.data.status)
             }
-            if (form.data.amount && form.data.status==='null') {
+            if (form.data.amount && form.data.status === 'null') {
                 queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('amount', '>=', form.data.amount)
             }
             if (form.data.status !== 'null' && !form.data.amount) {
                 queries = queries.query('join', 'orders', 'order_id', 'orders.id').where('status', '=', form.data.status)
             }
 
-            try {
-                let results = await queries.query(function (order) {
-                    order.groupBy('order_id').select('order_id')
-                }).fetch({
-                    withRelated: ['orders', 'products', 'orders.shoppers']
-                })
-                console.log(results.toJSON())
-                res.render('orders/index', {
-                    'orders': results.toJSON(),
-                    'form': form.toHTML(bootstrapField),
-                })
-                
-                
+            let results = await queries.query(function (order) {
+                order.groupBy('order_id').select('order_id')
+            }).fetch({
+                withRelated: ['orders', 'products', 'orders.shoppers']
+            })
+            console.log(results.toJSON())
+            res.render('orders/index', {
+                'orders': results.toJSON(),
+                'form': form.toHTML(bootstrapField),
+            })
 
-            } catch (e) {
-                res.render('orders/noResults')
-            }
 
         },
         'error': async (form) => {
@@ -81,6 +70,17 @@ router.get('/', async (req, res) => {
     })
 })
 
+router.get('/:order_id',async (req,res)=>{
+    let currentOrder=await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
+    let shopperDetails=await ordersAccessLayer.getOrderById(req.params.order_id)
+    // console.log(currentOrder.toJSON())
+    console.log(shopperDetails.toJSON())
+    res.render('orders/orderDetails',{
+        'products':currentOrder.toJSON(),
+        'shopper':shopperDetails.toJSON()
+    })
+})
+
 router.get('/:order_id/update', async (req, res) => {
     const orderToEdit = await ordersAccessLayer.getOrderById(req.params.order_id)
     // res.send(orderToEdit)
@@ -91,7 +91,7 @@ router.get('/:order_id/update', async (req, res) => {
 
     res.render('orders/update', {
         'order': orderToEdit.toJSON(),
-        'form':editForm.toHTML(bootstrapField)
+        'form': editForm.toHTML(bootstrapField)
     })
 })
 
