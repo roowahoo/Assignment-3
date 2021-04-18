@@ -12,6 +12,8 @@ router.get('/',async (req,res)=>{
     res.send(await productDataLayer.getAllProducts())
 })
 
+
+
 router.post('/',async (req,res)=>{
     const cats=productDataLayer.getAllCategories()
     const brands=productDataLayer.getAllBrands()

@@ -7,6 +7,9 @@ const { checkIfAuthenticated } = require('../middlewares')
 
 //import DAL
 const productDataLayer = require('../dal/product')
+//import services
+const productServices=require('../services/product_services')
+
 
 router.get('/shop', async (req, res) => {
 
@@ -229,5 +232,18 @@ router.post('/:product_id/delete', async (req, res) => {
     const productToDelete = await productDataLayer.getProductById(req.params.product_id)
     await productToDelete.destroy();
     res.redirect('/products/shop')
+})
+
+router.get('/applyPromo',async (req,res)=>{
+    let products=new productServices()
+    const allProducts = await products.getAllProducts()
+    res.send(allProducts)
+
+})
+
+router.post('/applyPromo',async (req,res)=>{
+    let products=new productServices()
+    await products.storewideDiscount(req.body.discount)
+    res.send(products)
 })
 module.exports = router
