@@ -80,4 +80,8 @@ const OrderItems=bookshelf.model('Order_item',{
         return this.belongsTo('Order')
     }
 })
-module.exports={Product,Category,Skintype,Brand,Tag,Vendor,Shopper,Bag,Orders,OrderItems}
+
+const BlacklistedToken=bookshelf.model('Blacklisted_token',{
+    tableName:'blacklisted_tokens'
+})
+module.exports={Product,Category,Skintype,Brand,Tag,Vendor,Shopper,Bag,Orders,OrderItems,BlacklistedToken}

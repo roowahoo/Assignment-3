@@ -1,8 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const { Shopper } = require('../../models')
+const { Shopper, BlacklistedToken } = require('../../models')
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../../forms')
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken');
+const { checkIfAuthenticatedJWT } = require('../../middlewares')
+
+const generateAccessToken = (user, secret, expiresIn) => {
+    return jwt.sign(user, secret, {
+        expiresIn: expiresIn
+    });
+}
 
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256')
@@ -17,18 +25,18 @@ router.post('/register', (req, res) => {
             let { confirm_password, ...shopperData } = form.data
             shopperData.password = getHashedPassword(shopperData.password)
             const newShopper = new Shopper(shopperData)
-            
+
             await newShopper.save()
             res.send(newShopper)
         },
         'error': async (form) => {
             let errors = {};
-           for (let key in form.fields) {
-               if (form.fields[key].error) {
-                   errors[key] = form.fields[key].error;
-               }
-           }
-           res.send(JSON.stringify(errors));
+            for (let key in form.fields) {
+                if (form.fields[key].error) {
+                    errors[key] = form.fields[key].error;
+                }
+            }
+            res.send(JSON.stringify(errors));
         }
     })
 })
@@ -44,12 +52,25 @@ router.post('/login', (req, res) => {
             })
             if (shopper) {
                 if (shopper.get('password') === getHashedPassword(req.body.password)) {
-                    // req.session.user = {
-                    //     id: vendor.get('id'),
-                    //     username: vendor.get('username'),
-                    //     email: vendor.get('email'),
-                    // }
-                    res.send(shopper)
+                    // let accessToken = generateAccessToken(shopper);
+                    // res.send({
+                    //     accessToken
+                    // })
+
+                    let accessToken = generateAccessToken({
+                        'username': shopper.get('username'),
+                        'email': shopper.get('email'),
+                        'id': shopper.get('id')
+                    }, process.env.TOKEN_SECRET, '15m')
+
+                    let refreshToken = generateAccessToken({
+                        'username': shopper.get('username'),
+                        'email': shopper.get('email'),
+                        'id': shopper.get('id')
+                    }, process.env.REFRESH_TOKEN_SECRET, '7d')
+                    res.send({
+                        accessToken, refreshToken
+                    })
                 } else {
                     res.send('Invalid Password')
                 }
@@ -59,15 +80,54 @@ router.post('/login', (req, res) => {
         },
         'error': (form) => {
             let errors = {};
-           for (let key in form.fields) {
-               if (form.fields[key].error) {
-                   errors[key] = form.fields[key].error;
-               }
-           }
-           res.send(JSON.stringify(errors));
+            for (let key in form.fields) {
+                if (form.fields[key].error) {
+                    errors[key] = form.fields[key].error;
+                }
+            }
+            res.send(JSON.stringify(errors));
         }
     })
 })
 
-module.exports=router
+router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
+    const user = req.user;
+    res.send(user);
+})
+
+router.post('/refresh', async (req, res) => {
+    let refreshToken = req.body.refreshToken
+    if (!refreshToken) {
+        res.sendStatus(401)
+    }
+
+    let blacklistedToken = await BlacklistedToken.where({
+        'token': refreshToken
+    }).fetch({
+        require: false
+    })
+    if (blacklistedToken) {
+        res.status(401)
+        res.send('Token has expired')
+        return
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, shopper) => {
+        if (err) {
+            res.sendStatus(403)
+        } else {
+            let accessToken = generateAccessToken({
+                'username': shopper.username,
+                'email': shopper.email,
+                'id': shopper.id
+            }, process.env.TOKEN_SECRET, '15m')
+            res.send({
+                accessToken
+            })
+        }
+    })
+
+})
+
+module.exports = router
 
