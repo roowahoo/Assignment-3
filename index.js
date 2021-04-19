@@ -1,3 +1,4 @@
+
 const express = require('express');
 const hbs = require('hbs');
 const wax = require('wax-on');
@@ -56,7 +57,7 @@ app.use(function (req, res, next) {
 // app.use(csrf())
 const csurfInstance = csrf();
 app.use(function(req,res,next){
-    if(req.url==='/checkout/process_payment' || req.url.slice(0,5)=='/api/'){
+    if(req.url==='/checkout/process_payment' || req.url.slice(0,5)=='/api/'||req.url==='/products/applyPromo'){
         return next()
     }
     csurfInstance(req,res,next)

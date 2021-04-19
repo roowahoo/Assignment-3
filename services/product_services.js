@@ -11,14 +11,13 @@ class productServices {
         return products
     }
     
-    async storewideDiscount(percentageDiscount) {
+    async storewideDiscount(discount) {
         const products = await productDataLayer.getAllProducts()
         for (let eachProduct of products) {
-            eachProduct.set('discounted_price', product.price * ((100-percentageDiscount)/100))
+            eachProduct.set('discounted_price', eachProduct.get('price') * ((100-discount)/100))
             await eachProduct.save()
-            return eachProduct
         }
-        
+        // console.log(products.toJSON())
     }
 }
 module.exports = productServices

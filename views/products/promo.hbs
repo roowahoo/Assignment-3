@@ -1,0 +1,13 @@
+{{#extends 'base'}}
+{{#block 'content'}}
+<form method="POST" action='/products/applyPromo'>
+    <div class="alert alert-danger">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        <input type='text' name='discount'>Discount:</p>
+        <input type='submit' value='Apply' class='btn btn-success btn-sm' />
+        {{!-- <a href='/products/applyPromo' class='btn btn-primary'>Apply</a> --}}
+        <a href="/products/shop" class="btn btn-success">Cancel</a>
+    </div>
+</form>
+{{/block}}
+{{/extends}}

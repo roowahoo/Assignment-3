@@ -237,13 +237,18 @@ router.post('/:product_id/delete', async (req, res) => {
 router.get('/applyPromo',async (req,res)=>{
     let products=new productServices()
     const allProducts = await products.getAllProducts()
-    res.send(allProducts)
+    res.render('products/promo',{
+        'products':allProducts
+    })
 
 })
 
 router.post('/applyPromo',async (req,res)=>{
+    // console.log(req.body)
     let products=new productServices()
     await products.storewideDiscount(req.body.discount)
-    res.send(products)
+    req.flash('success_messages','Promotion applied')
+    res.redirect('/products/shop')
 })
+
 module.exports = router
