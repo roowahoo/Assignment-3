@@ -39,7 +39,9 @@ const getProductById = async (productId)=>{
 }
 
 const getAllProducts = async ()=>{
-    return await Product.fetchAll()
+    return await Product.fetchAll({
+        withRelated:['tags']
+    })
 
 }
 

@@ -1,12 +1,13 @@
 {{#extends 'base'}}
 {{#block 'content'}}
 <form method="POST" action='/products/applyPromo'>
-    <div class="alert alert-danger">
+    <div>
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-        <input type='text' name='discount'>Discount:</p>
-        <input type='submit' value='Apply' class='btn btn-success btn-sm' />
-        {{!-- <a href='/products/applyPromo' class='btn btn-primary'>Apply</a> --}}
-        <a href="/products/shop" class="btn btn-success">Cancel</a>
+        <label class='form-label'>Discount:</label>
+        <input class='form-control' type='text' name='discount'/>
+        <input type='submit' value='Apply' class='btn btn-success btn-sm m-1' />
+        <a href='/products/endPromo' class='btn btn-primary btn-sm m-1'>End </a>
+        <a href="/products/shop" class="btn btn-primary btn-sm m-1">Cancel</a>
     </div>
 </form>
 {{/block}}

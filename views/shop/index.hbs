@@ -2,32 +2,40 @@
 {{#block 'content'}}
 <form method='GET'>
     {{{form}}}
-    <input type='submit' class='btn btn-primary' value='search'/>
+    <input type='submit' class='btn btn-primary' value='search' />
 </form>
-{{#each products}}
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{this.image_url}}" alt="product_image">
-  <div class="card-body">
-    <h4 class="card-text">{{this.brand.brand}}</h4>
-    <h5 class="card-title">{{this.name}}</h5>
-    <p class="card-text">{{this.description}}</p>
-    <p class="card-text">${{this.price}}</p>
-    <p class="card-text">{{this.category.name}}</p>
-    <p class="card-text">{{this.skintype.skintype}}</p>
-    {{#each this.tags}}
-    <span class="badge badge-pill badge-primary">{{this.tag}}</span>
+<div class='card-div'>
+    {{#each products}}
+
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="{{this.image_url}}" alt="product_image">
+        <div class="card-body">
+            <h4 class="card-text">{{this.brand.brand}}</h4>
+            <h5 class="card-title">{{this.name}}</h5>
+            <p class="card-text">{{this.description}}</p>
+            {{#if this.discounted_price}}
+            <p class="card-text"><s>${{this.price}}</s><span class="badge badge-pill badge-danger m-2">Offer</span></p>
+            <p class="card-text">${{this.discounted_price}}</p>
+            {{else}}
+            <p class="card-text">${{this.price}}</p>
+            {{/if}}
+            <p class="card-text">{{this.category.name}}</p>
+            <p class="card-text">{{this.skintype.skintype}}</p>
+            {{#each this.tags}}
+            <span class="badge badge-pill badge-primary">{{this.tag}}</span>
+            {{/each}}
+
+
+            <a href="/bag/{{this.id}}/add" class="btn btn-primary btn-sm">Add to Bag</a>
+            <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+            <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+
+
+        </div>
+    </div>
+
     {{/each}}
-
-
-    <a href="/bag/{{this.id}}/add" class="btn btn-primary btn-sm">Add to Bag</a>
-    <a href="/products/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-    <a href="/products/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-    
-
-  </div>
 </div>
-{{/each}}
 
 {{/block}}
 {{/extends}}
-

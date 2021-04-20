@@ -19,5 +19,13 @@ class productServices {
         }
         // console.log(products.toJSON())
     }
+
+    async endDiscount(){
+        const products = await productDataLayer.getAllProducts()
+        for (let eachProduct of products){
+            eachProduct.set('discounted_price',null)
+            await eachProduct.save()
+        }
+    }
 }
 module.exports = productServices

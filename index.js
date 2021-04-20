@@ -6,7 +6,7 @@ require('dotenv').config();
 const session = require('express-session');
 const flash = require('connect-flash');
 const csrf = require('csurf');
-const FileStore = require('session-file-store')(session)
+// const FileStore = require('session-file-store')(session)
 const cors=require('cors')
 
 // create an instance of express app
@@ -33,7 +33,7 @@ app.use(
 
 //sessions
 app.use(session({
-    store: new FileStore(),
+    // store: new FileStore(),
     secret: process.env.SESSION_SECRET_KEY,
     resave: false,
     saveUninitialized: true
@@ -57,7 +57,7 @@ app.use(function (req, res, next) {
 // app.use(csrf())
 const csurfInstance = csrf();
 app.use(function(req,res,next){
-    if(req.url==='/checkout/process_payment' || req.url.slice(0,5)=='/api/'||req.url==='/products/applyPromo'){
+    if(req.url==='/checkout/process_payment' || req.url.slice(0,5)=='/api/'){
         return next()
     }
     csurfInstance(req,res,next)

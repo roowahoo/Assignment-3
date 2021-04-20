@@ -251,4 +251,11 @@ router.post('/applyPromo',async (req,res)=>{
     res.redirect('/products/shop')
 })
 
+router.get('/endPromo', async (req,res)=>{
+    let products=new productServices()
+    await products.endDiscount()
+    req.flash('success_messages','Promotion ended')
+    res.redirect('/products/shop')
+})
+
 module.exports = router
