@@ -1,4 +1,4 @@
-const { Product,Category, Skintype, Brand, Tag } = require('../models')
+const { Product, Category, Skintype, Brand, Tag } = require('../models')
 const getAllCategories = async () => {
     const allCategories = await Category.fetchAll().map((category) => {
         return [category.get('id'), category.get('name')]
@@ -27,20 +27,20 @@ const getAllTags = async () => {
     return allTags
 }
 
-const getProductById = async (productId)=>{
-    const productToEdit=await Product.where({
-        'id':productId
+const getProductById = async (productId) => {
+    const productToEdit = await Product.where({
+        'id': productId
     }).fetch({
-        require:true,
-        withRelated:['tags']
+        require: true,
+        withRelated: ['tags']
     })
     return productToEdit
 
 }
 
-const getAllProducts = async ()=>{
-    return await Product.fetchAll({
-        withRelated:['tags']
+const getAllProducts = async () => {
+    return await Product.collection().fetch({
+        withRelated: ['category', 'skintype', 'brand', 'tags']
     })
 
 }

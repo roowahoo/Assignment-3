@@ -12,6 +12,16 @@ router.get('/',async (req,res)=>{
     res.send(await productDataLayer.getAllProducts())
 })
 
+router.post('/skintype',async (req,res)=>{
+    const products = await Product.where({
+        'skintype_id':req.body.skintype_id
+    }).fetchAll({
+        require:true,
+        withRelated:['category', 'skintype', 'brand', 'tags']
+    })
+    res.send(products)
+})
+
 
 
 router.post('/',async (req,res)=>{
