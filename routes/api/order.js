@@ -45,7 +45,12 @@ router.get('/:user_id', async (req, res) => {
         
         
         // ---------UPDATE AMOUNT IN ORDERS---------
-        eachItemAmt = item.related('products').get('price') * (item.get('quantity'))
+        if(item.related('products').get('discounted_price')){
+            eachItemAmt = item.related('products').get('discounted_price') * (item.get('quantity'))
+        }else{
+            eachItemAmt = item.related('products').get('price') * (item.get('quantity'))
+        }
+        
         // console.log(eachItemAmt)
         sum.push(eachItemAmt)
         // console.log(sum)

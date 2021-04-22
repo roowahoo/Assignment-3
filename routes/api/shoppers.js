@@ -6,6 +6,8 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken');
 const { checkIfAuthenticatedJWT } = require('../../middlewares')
 
+const shopperDataLayer=require('../../dal/shoppers')
+
 const generateAccessToken = (user, secret, expiresIn) => {
     return jwt.sign(user, secret, {
         expiresIn: expiresIn
@@ -73,6 +75,20 @@ router.post('/login', async (req, res) => {
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
     const user = req.user;
     res.send(user);
+})
+
+router.post('/profile/:user_id/update',async (req,res)=>{
+    
+    profileToEdit=await shopperDataLayer.getShopperById(req.params.user_id)
+    console.log(profileToEdit.toJSON())
+    password = getHashedPassword(req.body.password)
+
+    profileToEdit.set('username',req.body.username)
+    profileToEdit.set('address',req.body.address)
+    profileToEdit.set('password',password)
+    profileToEdit.save()
+    res.send(profileToEdit)
+
 })
 
 router.post('/refresh', async (req, res) => {

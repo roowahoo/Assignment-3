@@ -125,7 +125,7 @@ router.post('/:order_id/delete',async (req,res)=>{
         await item.destroy()
     }
     await orderToDelete.destroy()
-    req.flash('success_messages', `Order ${orderToDelete.get('id')} has been deleted`)
+    req.flash('success_messages', `Order has been deleted`)
     res.redirect('/orders')
 })
 
