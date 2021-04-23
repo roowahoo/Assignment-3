@@ -14,10 +14,10 @@
             <h5 class="card-title">{{this.name}}</h5>
             <p class="card-text">{{this.description}}</p>
             {{#if this.discounted_price}}
-            <p class="card-text"><s>${{this.price}}</s><span class="badge badge-pill badge-danger m-2">Offer</span></p>
-            <p class="card-text">${{this.discounted_price}}</p>
+            <p class="card-text"><s>{{this.price}}¢</s><span class="badge badge-pill badge-danger m-2">Offer</span></p>
+            <p class="card-text">{{this.discounted_price}}¢</p>
             {{else}}
-            <p class="card-text">${{this.price}}</p>
+            <p class="card-text">{{this.price}}¢</p>
             {{/if}}
             <p class="card-text">{{this.category.name}}</p>
             <p class="card-text">{{this.skintype.skintype}}</p>

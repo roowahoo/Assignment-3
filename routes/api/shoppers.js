@@ -6,7 +6,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken');
 const { checkIfAuthenticatedJWT } = require('../../middlewares')
 
-const shopperDataLayer=require('../../dal/shoppers')
+const shopperDataLayer = require('../../dal/shoppers')
 
 const generateAccessToken = (user, secret, expiresIn) => {
     return jwt.sign(user, secret, {
@@ -25,10 +25,10 @@ router.post('/register', async (req, res) => {
 
     password = getHashedPassword(req.body.password)
     const newShopper = new Shopper()
-    newShopper.set('username',req.body.username)
-    newShopper.set('email',req.body.email)
-    newShopper.set('address',req.body.address)
-    newShopper.set('password',password)
+    newShopper.set('username', req.body.username)
+    newShopper.set('email', req.body.email)
+    newShopper.set('address', req.body.address)
+    newShopper.set('password', password)
 
     await newShopper.save()
     res.send(newShopper)
@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    
+
     let shopper = await Shopper.where({
         'email': req.body.email
     }).fetch({
@@ -77,15 +77,15 @@ router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
     res.send(user);
 })
 
-router.post('/profile/:user_id/update',async (req,res)=>{
-    
-    profileToEdit=await shopperDataLayer.getShopperById(req.params.user_id)
+router.post('/profile/:user_id/update', async (req, res) => {
+
+    profileToEdit = await shopperDataLayer.getShopperById(req.params.user_id)
     console.log(profileToEdit.toJSON())
     password = getHashedPassword(req.body.password)
 
-    profileToEdit.set('username',req.body.username)
-    profileToEdit.set('address',req.body.address)
-    profileToEdit.set('password',password)
+    profileToEdit.set('username', req.body.username)
+    profileToEdit.set('address', req.body.address)
+    profileToEdit.set('password', password)
     profileToEdit.save()
     res.send(profileToEdit)
 
@@ -124,6 +124,30 @@ router.post('/refresh', async (req, res) => {
     })
 
 })
+
+router.post('/logout', async (req, res) => {
+    let refreshToken = req.body.refreshToken;
+    if (!refreshToken) {
+        res.sendStatus(401);
+    } else {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+
+            const token = new BlacklistedToken();
+            token.set('token', refreshToken);
+            token.set('date_created', new Date());
+            await token.save();
+            res.send({
+                'message': 'logged out'
+            })
+        })
+
+    }
+
+})
+
 
 
 
