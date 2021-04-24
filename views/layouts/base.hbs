@@ -13,22 +13,19 @@
     <link rel='stylesheet' href='/styles.css'>
 
 
-    <title>Hello, world!</title>
+    <title>The Skin Shop</title>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Skincare</a>
+        <a class="navbar-brand" href="/products/shop"><img src='/logo-vendor.png' id='logo'/></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/products/shop">Shop</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/products/create">Create</a>
                 </li>
@@ -48,15 +45,14 @@
             {{#if user}}
             Hi, {{user.username}}
 
-            <a href="/vendors/logout" class="ml-3 btn btn-primary btn-sm">Logout</a>
+            <a href="/vendors/logout" class="ml-3 btn goldBtn btn-sm">Logout</a>
 
             {{else}}
-            Hi, stranger
-            <a href="/vendors/login" class="ml-3 btn btn-primary btn-sm">Login</a>
+            <a href="/vendors/login" class="ml-3 btn goldBtn btn-sm">Login</a>
             {{/if}}
         </div>
     </nav>
-    <section class='container p-3'>
+    <section class='container-fluid p-3'>
         {{#if success_messages }}
         {{#each success_messages}}
         <div class="alert alert-success">

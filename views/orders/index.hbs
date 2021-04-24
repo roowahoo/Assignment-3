@@ -3,44 +3,46 @@
 <form method='GET'>
     {{{form}}}
     <div class='d-flex justify-content-end'>
-        <input type='submit' class='btn btn-primary mb-3' value='search' />
+        <input type='submit' class='btn goldBtn mb-3' value='search' />
     </div>
 </form>
-<table class='table'>
-    <thead>
-        <tr>
+<div  style="overflow-x:auto;">
+    <table class='table'>
+        <thead>
+            <tr>
 
-            <th>Order Id</th>
-            <th>Customer Name</th>
-            <th>Shipping Address</th>
-            <th>Contact</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each orders}}
-        <tr>
+                <th>Order Id</th>
+                <th>Customer Name</th>
+                <th>Shipping Address</th>
+                <th>Contact</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
 
-            <td><a href="/orders/{{this.orders.id}}">{{this.orders.id}}</a></td>
-            <td>{{this.orders.shoppers.username}}</td>
-            <td>{{this.orders.shipping_address}}</td>
-            <td>{{this.orders.contact_number}}</td>
-            <td>{{this.orders.amount}}</td>
-            <td>{{this.orders.status}}</td>
-            <td>{{this.orders.date}}</td>
-            <td>
-                <a href="/orders/{{this.orders.id}}/update" class="btn btn-primary btn-sm">Update</a>
-            </td>
-            <td>
-                <a href='/orders/{{this.orders.id}}/delete' class='btn btn-danger btn-sm'>Delete</a>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
+                <td><a href="/orders/{{this.orders.id}}">{{this.orders.id}}</a></td>
+                <td>{{this.orders.shoppers.username}}</td>
+                <td>{{this.orders.shipping_address}}</td>
+                <td>{{this.orders.contact_number}}</td>
+                <td>{{this.orders.amount}}</td>
+                <td>{{this.orders.status}}</td>
+                <td>{{this.orders.date}}</td>
+                <td>
+                    <a href="/orders/{{this.orders.id}}/update" class="">&#128394;</a>
+                </td>
+                <td>
+                    <a href='/orders/{{this.orders.id}}/delete' class='btn btn-danger btn-sm'>Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
 
-</table>
+    </table>
+</div>
 {{!-- <table class='table' style="visibility:hidden">
     <thead>
         <tr>

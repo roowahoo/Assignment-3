@@ -1,5 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
 body{
-    background-color: #f5f4e1;
+    background-color: #f3f1ef ;
+    font-family: 'Playfair Display', serif !important
+}
+
+.navbar{
+    background-color: #d4c7b0 !important;
+}
+
+#logo{
+    height:90px
+}
+
+.goldBtn{
+    background-color: #d4af37 !important ;
+    color:white !important;
+    box-shadow:0 8px 16px 0 rgba(237, 194, 113, 0.7), 0 8px 8px 0 rgba(0,0,0,0.19);
+    padding:5px 30px
 }
 
 .card-div{
@@ -8,4 +25,10 @@ body{
 
 .card{
     margin:0 50px
+}
+
+.text{
+    color:#bc6c25;
+    text-align: center;
+    
 }

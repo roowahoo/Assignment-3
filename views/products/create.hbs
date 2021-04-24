@@ -1,13 +1,13 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Create New Product</h1>
+<h1 class='text'>Create New Product</h1>
 <form method="POST">
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     {{{form}}}
     <div class='d-flex justify-content-between'>
         <input type="hidden" role="uploadcare-uploader" name="uploaded_image" id='uploaded_image' />
-        <input type="submit" value="Add Product" class="btn btn-primary" id='add_product' />
+        <input type="submit" value="Add Product" class="btn goldBtn" id='add_product' />
     </div>
     {{/block}}
 </form>

@@ -3,10 +3,13 @@
 <form method="POST" action='/products/applyPromo'>
     <div>
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-        <label class='form-label'>Discount:</label>
-        <input class='form-control' type='text' name='discount'/>
-        <input type='submit' value='Apply' class='btn btn-success btn-sm m-1' />
-        <a href='/products/endPromo' class='btn btn-primary btn-sm m-1'>End </a>
+        <label class='form-label'>Percentage Discount:</label>
+        <input class='form-control' type='text' name='discount' />
+        <div class='d-flex justify-content-between'>
+            <a href='/products/endPromo' class='btn goldBtn btn-sm m-1'>End Promo </a>
+            <input type='submit' value='Apply' class='btn goldBtn btn-sm m-1' />
+        </div>
+
     </div>
 </form>
 {{/block}}
