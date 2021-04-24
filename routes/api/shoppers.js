@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
         require: false
     })
     if (shopper) {
-        if (shopper.get('password') == getHashedPassword(req.body.password)) {
+        if (shopper.get('password') === getHashedPassword(req.body.password)) {
 
             let accessToken = generateAccessToken({
                 'username': shopper.get('username'),
@@ -63,6 +63,7 @@ router.post('/login', async (req, res) => {
                 accessToken, refreshToken
             })
         } else {
+            // res.sendStatus(403)
             res.send('Invalid Password')
         }
     } else {
