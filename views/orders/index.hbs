@@ -2,12 +2,14 @@
 {{#block 'content'}}
 <form method='GET'>
     {{{form}}}
-    <input type='submit' class='btn btn-primary' value='search' />
+    <div class='d-flex justify-content-end'>
+        <input type='submit' class='btn btn-primary mb-3' value='search' />
+    </div>
 </form>
 <table class='table'>
     <thead>
         <tr>
-            
+
             <th>Order Id</th>
             <th>Customer Name</th>
             <th>Shipping Address</th>
@@ -20,7 +22,7 @@
     <tbody>
         {{#each orders}}
         <tr>
-            
+
             <td><a href="/orders/{{this.orders.id}}">{{this.orders.id}}</a></td>
             <td>{{this.orders.shoppers.username}}</td>
             <td>{{this.orders.shipping_address}}</td>

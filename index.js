@@ -75,6 +75,7 @@ const landingRoutes = require('./routes/landing')
 const productsRoutes = require('./routes/products')
 const vendorsRoutes = require('./routes/vendors')
 const ordersRoutes = require('./routes/orders')
+const promoRoutes=require('./routes/promo')
 
 const api={
     products:require('./routes/api/products'),
@@ -89,6 +90,7 @@ async function main() {
     app.use('/products', productsRoutes)
     app.use('/vendors', vendorsRoutes)
     app.use('/orders',ordersRoutes)
+    app.use('/applyPromo',promoRoutes)
     app.use('/api/products',express.json(),api.products)
     app.use('/api/shoppers',express.json(),api.shoppers)
     app.use('/api/bag',express.json(),api.shoppingBag)

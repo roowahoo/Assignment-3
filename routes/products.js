@@ -105,7 +105,7 @@ router.get('/shop', async (req, res) => {
     // console.log(products.toJSON())
 })
 
-router.get('/create', checkIfAuthenticated, async (req, res) => {
+router.get('/create', async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -116,7 +116,7 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
     })
 })
 
-router.post('/create', checkIfAuthenticated, async (req, res) => {
+router.post('/create', async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -160,7 +160,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
     })
 })
 
-router.get('/:product_id/update', async (req, res) => {
+router.get('/:product_id/update',  async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -234,22 +234,7 @@ router.post('/:product_id/delete', async (req, res) => {
     res.redirect('/products/shop')
 })
 
-router.get('/applyPromo',async (req,res)=>{
-    let products=new productServices()
-    const allProducts = await products.getAllProducts()
-    res.render('products/promo',{
-        'products':allProducts
-    })
 
-})
-
-router.post('/applyPromo',async (req,res)=>{
-    // console.log(req.body)
-    let products=new productServices()
-    await products.storewideDiscount(req.body.discount)
-    req.flash('success_messages','Promotion applied')
-    res.redirect('/products/shop')
-})
 
 router.get('/endPromo', async (req,res)=>{
     let products=new productServices()

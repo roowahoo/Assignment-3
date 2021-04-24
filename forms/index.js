@@ -55,6 +55,7 @@ const createProductForm = (categories, skintype, brands, tags) => {
         }),
 
         'net_weight': fields.string({
+            label:'Net Weight(g)',
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -63,6 +64,7 @@ const createProductForm = (categories, skintype, brands, tags) => {
             'validators': [validators.integer()]
         }),
         'price': fields.string({
+            label:'Price(¢)',
             required: true,
             errorAfterField: true,
             cssClasses: {
