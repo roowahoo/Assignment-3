@@ -127,8 +127,8 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
     productForm.handle(req, {
         'success': async (form) => {
             let { tags, ...productData } = form.data
-            const newProduct = new Product();
-            newProduct.set(productData)
+            const newProduct = new Product(productData);
+            // newProduct.set(productData)
             // newProduct.set('name',form.data.name)
             // newProduct.set('description',form.data.description)
             // newProduct.set('directions',form.data.directions)
