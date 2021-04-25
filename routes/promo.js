@@ -6,7 +6,7 @@ const { checkIfAuthenticated } = require('../middlewares')
 //import services
 const productServices=require('../services/product_services')
 
-router.get('/',async (req,res)=>{
+router.get('/', checkIfAuthenticated, async (req,res)=>{
     let products=new productServices()
     const allProducts = await products.getAllProducts()
     res.render('products/promo',{
@@ -15,7 +15,7 @@ router.get('/',async (req,res)=>{
 
 })
 
-router.post('/',async (req,res)=>{
+router.post('/', checkIfAuthenticated, async (req,res)=>{
     // console.log(req.body)
     let products=new productServices()
     await products.storewideDiscount(req.body.discount)

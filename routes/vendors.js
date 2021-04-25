@@ -24,12 +24,14 @@ router.post('/register', (req, res) => {
         'success': async (form) => {
             let { confirm_password, ...vendorData } = form.data
             vendorData.password = getHashedPassword(vendorData.password)
-            const newVendor = new Vendor(vendorData)
+            const newVendor = new Vendor();
+            newVendor.set(vendorData);
             // const Vendor=new Vendor({
             //     'username':form.data.username,
             //     'email':form.data.email,
             //     'password':getHashedPassword(form.data.password)
             // })
+
             await newVendor.save()
             req.flash('success_messages', 'Thank you for signing up')
             res.redirect('/vendors/login')

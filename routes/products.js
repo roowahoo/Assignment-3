@@ -116,7 +116,7 @@ router.get('/create', async (req, res) => {
     })
 })
 
-router.post('/create', async (req, res) => {
+router.post('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -160,7 +160,7 @@ router.post('/create', async (req, res) => {
     })
 })
 
-router.get('/:product_id/update',  async (req, res) => {
+router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
@@ -193,7 +193,7 @@ router.get('/:product_id/update',  async (req, res) => {
     })
 })
 
-router.post('/:product_id/update', async (req, res) => {
+router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productToEdit = await productDataLayer.getProductById(req.params.product_id)
     const productJSON = productToEdit.toJSON()
     const existingTagIds = productJSON.tags.map(t => t.id)
@@ -221,14 +221,14 @@ router.post('/:product_id/update', async (req, res) => {
 
 })
 
-router.get('/:product_id/delete', async (req, res) => {
+router.get('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productToDelete = await productDataLayer.getProductById(req.params.product_id)
     res.render('products/delete', {
         'product': productToDelete
     })
 })
 
-router.post('/:product_id/delete', async (req, res) => {
+router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productToDelete = await productDataLayer.getProductById(req.params.product_id)
     await productToDelete.destroy();
     res.redirect('/products/shop')
@@ -236,7 +236,7 @@ router.post('/:product_id/delete', async (req, res) => {
 
 
 
-router.get('/endPromo', async (req,res)=>{
+router.get('/endPromo', checkIfAuthenticated, async (req,res)=>{
     let products=new productServices()
     await products.endDiscount()
     req.flash('success_messages','Promotion ended')

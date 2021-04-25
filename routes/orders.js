@@ -7,7 +7,7 @@ const ordersAccessLayer = require('../dal/orders')
 const shoppersAccessLayer = require('../dal/shoppers')
 
 
-router.get('/', async (req, res) => {
+router.get('/', checkIfAuthenticated, async (req, res) => {
     const searchForm = createOrderSearchForm()
     let queries = OrderItems.collection()
 
@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/:order_id', async (req, res) => {
+router.get('/:order_id', checkIfAuthenticated, async (req, res) => {
     let currentOrder = await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
     let orderDetails = await ordersAccessLayer.getOrderById(req.params.order_id)
     // console.log(currentOrder.toJSON())
@@ -81,7 +81,7 @@ router.get('/:order_id', async (req, res) => {
     })
 })
 
-router.get('/:order_id/update', async (req, res) => {
+router.get('/:order_id/update', checkIfAuthenticated, async (req, res) => {
     const orderToEdit = await ordersAccessLayer.getOrderById(req.params.order_id)
     // res.send(orderToEdit)
     // const editForm = editOrderForm()
@@ -98,7 +98,7 @@ router.get('/:order_id/update', async (req, res) => {
     
 })
 
-router.post('/:order_id/update', async (req, res) => {
+router.post('/:order_id/update',checkIfAuthenticated, async (req, res) => {
     const orderToEdit = await ordersAccessLayer.getOrderById(req.params.order_id)
 
     orderToEdit.set('shipping_address', req.body.shipping_address)
@@ -109,7 +109,7 @@ router.post('/:order_id/update', async (req, res) => {
 
 })
 
-router.get('/:order_id/delete',async (req,res)=>{
+router.get('/:order_id/delete', checkIfAuthenticated, async (req,res)=>{
     const orderToDelete = await ordersAccessLayer.getOrderById(req.params.order_id)
     res.render('orders/delete',{
         'order':orderToDelete
@@ -117,7 +117,7 @@ router.get('/:order_id/delete',async (req,res)=>{
 
 })
 
-router.post('/:order_id/delete',async (req,res)=>{
+router.post('/:order_id/delete',checkIfAuthenticated, async (req,res)=>{
     const orderItemsToDelete=await ordersAccessLayer.getOrderItemsByOrderId(req.params.order_id)
     const orderToDelete = await ordersAccessLayer.getOrderById(req.params.order_id)
     console.log(orderItemsToDelete.toJSON())
