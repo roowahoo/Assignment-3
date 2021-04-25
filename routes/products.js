@@ -105,7 +105,7 @@ router.get('/shop', async (req, res) => {
     // console.log(products.toJSON())
 })
 
-router.get('/create', async (req, res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
     const allCategories = await productDataLayer.getAllCategories()
     const allSkintypes = await productDataLayer.getAllSkintypes()
     const allBrands = await productDataLayer.getAllBrands()
