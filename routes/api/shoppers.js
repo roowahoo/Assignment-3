@@ -74,8 +74,14 @@ router.post('/login', async (req, res) => {
 
 
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
-    const user = req.user;
-    res.send(user);
+    try {
+        const user = req.user;
+        res.send(user);
+
+    } catch (e) {
+        res.send(e)
+    }
+
 })
 
 router.post('/profile/:user_id/update', async (req, res) => {
