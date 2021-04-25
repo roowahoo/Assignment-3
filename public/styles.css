@@ -22,10 +22,12 @@ body{
 .card-div{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card{
-    margin:0 50px
+    margin:0 50px;
+    margin:20px 20px
 }
 
 .text{
