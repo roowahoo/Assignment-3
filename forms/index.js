@@ -165,7 +165,7 @@ const createRegistrationForm = () => {
             }
         }),
         'confirm_password': fields.password({
-            required: true,
+            required:validators.required('don\'t you know your own password?'),
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
