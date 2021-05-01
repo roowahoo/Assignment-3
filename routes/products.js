@@ -236,11 +236,6 @@ router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
 
 
 
-router.get('/endPromo', checkIfAuthenticated, async (req,res)=>{
-    let products=new productServices()
-    await products.endDiscount()
-    req.flash('success_messages','Promotion ended')
-    res.redirect('/products/shop')
-})
+
 
 module.exports = router
